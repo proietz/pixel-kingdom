@@ -1,0 +1,65 @@
+body {
+background: linear-gradient(120deg, #1a1a1a, #333);
+font-family: 'Roboto', sans-serif;
+color: #fff;
+margin: 0;
+padding: 0;
+}
+
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+font-size: 1.5rem;
+}
+
+#langSelector {
+font-size: 1rem;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(1000, 1fr);
+gap: 1px;
+padding: 10px;
+justify-content: center;
+}
+
+.cell {
+width: 10px;
+height: 10px;
+background: #222;
+border: 1px solid #333;
+cursor: pointer;
+transition: 0.2s;
+}
+
+.cell:hover {
+background: #555;
+}
+
+.popup {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background: #222;
+border: 2px solid #555;
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+z-index: 1000;
+}
+
+.hidden {
+display: none;
+}
+
+footer {
+text-align: center;
+padding: 10px;
+font-size: 0.8rem;
+color: #aaa;
+}
