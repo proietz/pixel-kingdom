@@ -26,12 +26,36 @@ color: #ffcc00;
 margin-top: 10px;
 }
 
+#counter {
+margin-top: 10px;
+display: flex;
+gap: 15px;
+align-items: center;
+}
+
+.status-square {
+width: 15px;
+height: 15px;
+background-color: green;
+border: 1px solid #fff;
+}
+
+#searchPanel {
+margin-top: 10px;
+display: flex;
+gap: 5px;
+}
+
+.grid-container {
+overflow: auto;
+height: 80vh;
+}
+
 .grid {
 display: grid;
-grid-template-columns: repeat(1000, 1fr);
+grid-template-columns: repeat(1000, 10px);
+grid-auto-rows: 10px;
 gap: 1px;
-padding: 10px;
-justify-content: center;
 }
 
 .cell {
@@ -45,6 +69,10 @@ transition: 0.2s;
 
 .cell:hover {
 background: #555;
+}
+
+.highlight {
+border: 2px solid yellow;
 }
 
 .popup {

@@ -23,14 +23,30 @@
 </select>
 </div>
 <div id="infoText">1 milione di celle — 1€ per cella</div>
+
+<div id="counter">
+<span id="occupiedCounter">Occupate: 0</span>
+<span id="availableCounter">Disponibili: 1000000</span>
+<span class="status-square" id="statusSquare"></span>
+</div>
+
+<div id="searchPanel">
+<input type="text" id="searchInput" placeholder="Inserisci coordinate o nome..." />
+<button onclick="searchCell()">Cerca</button>
+</div>
 </header>
 
 <main>
+<div class="grid-container">
 <div class="grid" id="grid"></div>
+</div>
 </main>
 
 <div id="popup" class="popup hidden">
 <h3 id="popupTitle">Acquista Cella</h3>
+<input type="text" id="cellText" placeholder="Nome/Contenuto"/>
+<input type="color" id="cellColor" value="#ffffff"/>
+<input type="text" id="cellLink" placeholder="Link opzionale"/>
 <button id="buyButton">Acquista Cella</button>
 <button onclick="closePopup()">Chiudi</button>
 </div>
