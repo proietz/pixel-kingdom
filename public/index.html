@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Pixel Kingdom</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+margin: 0;
+overflow: hidden;
+font-family: Arial, sans-serif;
+background: #111;
+color: white;
+}
+
+header {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+height: 50px;
+background: #1e1e2f;
+display: flex;
+align-items: center;
+padding: 0 20px;
+gap: 15px;
+z-index: 10;
+}
+
+header select {
+margin-left: auto;
+padding: 5px;
+}
+
+canvas {
+position: absolute;
+top: 50px;
+left: 0;
+}
+
+#overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.6);
+z-index: 20;
+}
+
+#popup {
+display: none;
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background: #1e1e2f;
+padding: 20px;
+width: 300px;
+border-radius: 6px;
+z-index: 21;
+}
+
+#popup input,
+#popup textarea,
+#popup button {
+width: 100%;
+margin-bottom: 8px;
+}
+
+#popup button {
+padding: 10px;
+background: #1e88e5;
+color: white;
+border: none;
+cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<strong id="title"></strong>
+<span id="subtitle"></span>
+
+<select id="langSwitcher">
+<option value="it">IT</option>
+<option value="en">EN</option>
+</select>
+</header>
+
+<canvas id="map"></canvas>
+
+<div id="overlay"></div>
+
+<div id="popup">
+<h3 id="popupTitle">Acquista cella</h3>
+<textarea id="pText" placeholder="Testo"></textarea>
+<input id="pLink" placeholder="Link">
+<input id="pColor" type="color" value="#ff0000">
+<button id="saveCell">Salva cella</button>
+</div>
+
+<script>
+const canvas = document.getElementById("map");
+const ctx = canvas.getContext("2d");
+
+const overlay = document.getElementById("overlay");
+const popup = document.getElementById("popup");
+const saveBtn = document.getElementById("saveCell");
+
+const GRID_SIZE = 1000;
+let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
+let dragging = false;
+let lastX = 0;
+let lastY = 0;
+
+let selectedCell = null;
+const ownedCells = {};
+
+/* ===== MULTILINGUA ===== */
+
+const LANG = {
+it: {
+title: "Pixel Kingdom",
+subtitle: "1.000.000 celle — 1€ per cella"
+},
+en: {
+title: "Pixel Kingdom",
+subtitle: "1,000,000 cells — €1 per cell"
+}
+};
+
+let currentLang = localStorage.getItem("lang") || "en";
+
+function applyLanguage() {
+document.getElementById("title").innerText = LANG[currentLang].title;
+document.getElementById("subtitle").innerText = LANG[currentLang].subtitle;
+document.getElementById("langSwitcher").value = currentLang;
+}
+
+document.getElementById("langSwitcher").onchange = e => {
+currentLang = e.target.value;
+localStorage.setItem("lang", currentLang);
+applyLanguage();
+};
+
+/* ===== CANVAS ===== */
+
+function resize() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight - 50;
+drawCells();
+}
+
+window.onresize = resize;
+
+function draw() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.save();
+ctx.translate(offsetX, offsetY);
+ctx.scale(scale, scale);
+
+ctx.fillStyle = "#222";
+ctx.fillRect(0, 0, GRID_SIZE, GRID_SIZE);
+
+ctx.fillStyle = "#444";
+for (let i = 0; i <= GRID_SIZE; i += 50) {
+ctx.fillRect(i, 0, 1, GRID_SIZE);
+ctx.fillRect(0, i, GRID_SIZE, 1);
+}
+
+ctx.restore();
+}
+
+function drawCells() {
+draw();
+ctx.save();
+ctx.translate(offsetX, offsetY);
+ctx.scale(scale, scale);
+
+for (const id in ownedCells) {
+const c = ownedCells[id];
+const x = c.cellId % GRID_SIZE;
+const y = Math.floor(c.cellId / GRID_SIZE);
+ctx.fillStyle = c.color;
+ctx.fillRect(x, y, 1, 1);
+}
+
+ctx.restore();
+}
+
+canvas.onmousedown = e => {
+dragging = true;
+lastX = e.clientX;
+lastY = e.clientY;
+};
+
+canvas.onmouseup = () => dragging = false;
+canvas.onmouseleave = () => dragging = false;
+
+canvas.onmousemove = e => {
+if (!dragging) return;
+offsetX += e.clientX - lastX;
+offsetY += e.clientY - lastY;
+lastX = e.clientX;
+lastY = e.clientY;
+drawCells();
+};
+
+canvas.onwheel = e => {
+e.preventDefault();
+scale *= e.deltaY < 0 ? 1.1 : 0.9;
+drawCells();
+};
+
+canvas.onclick = e => {
+const rect = canvas.getBoundingClientRect();
+const mx = (e.clientX - rect.left - offsetX) / scale;
+const my = (e.clientY - rect.top - offsetY) / scale;
+
+const x = Math.floor(mx);
+const y = Math.floor(my);
+
+if (x < 0 || y < 0 || x >= GRID_SIZE || y >= GRID_SIZE) return;
+
+const id = y * GRID_SIZE + x;
+if (ownedCells[id]) return;
+
+selectedCell = { x, y, id };
+overlay.style.display = "block";
+popup.style.display = "block";
+};
+
+overlay.onclick = () => {
+overlay.style.display = "none";
+popup.style.display = "none";
+};
+
+saveBtn.onclick = async () => {
+if (!selectedCell) return;
+
+const data = {
+cellId: selectedCell.id,
+text: document.getElementById("pText").value,
+link: document.getElementById("pLink").value,
+color: document.getElementById("pColor").value
+};
+
+const res = await fetch("/api/buyCell", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(data)
+});
+
+const result = await res.json();
+
+if (result.success) {
+ownedCells[data.cellId] = data;
+drawCells();
+} else {
+alert("Cella già occupata");
+}
+
+popup.style.display = "none";
+overlay.style.display = "none";
+};
+
+fetch("/api/loadCells")
+.then(res => res.json())
+.then(cells => {
+cells.forEach(c => ownedCells[c.cellId] = c);
+drawCells();
+});
+
+applyLanguage();
+resize();
+</script>
+
+</body>
+</html>
