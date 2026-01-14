@@ -46,33 +46,10 @@ display: flex;
 gap: 5px;
 }
 
-.grid-container {
-overflow: auto;
-height: 80vh;
-}
-
-.grid {
-display: grid;
-grid-template-columns: repeat(1000, 10px);
-grid-auto-rows: 10px;
-gap: 1px;
-}
-
-.cell {
-width: 10px;
-height: 10px;
-background: #222;
-border: 1px solid #333;
-cursor: pointer;
-transition: 0.2s;
-}
-
-.cell:hover {
-background: #555;
-}
-
-.highlight {
-border: 2px solid yellow;
+canvas {
+display: block;
+margin: 10px auto;
+border: 1px solid #555;
 }
 
 .popup {
@@ -91,6 +68,11 @@ z-index: 1000;
 
 .hidden {
 display: none;
+}
+
+.highlightRect {
+stroke: yellow;
+lineWidth: 2;
 }
 
 footer {

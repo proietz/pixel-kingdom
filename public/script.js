@@ -19,113 +19,103 @@ document.getElementById("popupTitle").innerText = translations[lang].popup;
 document.getElementById("infoText").innerText = translations[lang].info;
 }
 
-// ==================== Gestione griglia ====================
+// ==================== Canvas Grid ====================
 const GRID_SIZE = 1000;
-const visibleRows = 50; // visualizza 50 righe alla volta per virtualizzazione
-const gridContainer = document.querySelector(".grid-container");
-const grid = document.getElementById("grid");
+const CELL_SIZE = 10;
+const canvas = document.getElementById("gridCanvas");
+const ctx = canvas.getContext("2d");
 
 // Simulazione database delle celle occupate
 let occupiedCells = {}; // key: "x_y", value: {text,color,link}
 
-// Funzione per aggiornare contatore
+// Disegna griglia
+function drawGrid() {
+ctx.clearRect(0,0,canvas.width,canvas.height);
+for (let key in occupiedCells) {
+const [x,y] = key.split("_").map(Number);
+ctx.fillStyle = occupiedCells[key].color;
+ctx.fillRect(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+}
+}
+
+drawGrid();
+updateCounter();
+
+// ==================== Contatore ====================
 function updateCounter() {
 const occupied = Object.keys(occupiedCells).length;
-const available = GRID_SIZE * GRID_SIZE - occupied;
+const available = GRID_SIZE*GRID_SIZE - occupied;
 document.getElementById("occupiedCounter").innerText = `Occupate: ${occupied}`;
 document.getElementById("availableCounter").innerText = `Disponibili: ${available}`;
 const status = document.getElementById("statusSquare");
-status.style.backgroundColor = available > 0 ? "green" : "red";
+status.style.backgroundColor = available>0?"green":"red";
 }
 
-// Crea celle virtuali visibili solo quelle necessarie
-function renderGrid() {
-grid.innerHTML = "";
-const fragment = document.createDocumentFragment();
-for (let row = 0; row < GRID_SIZE; row++) {
-for (let col = 0; col < GRID_SIZE; col++) {
-const key = `${col}_${row}`;
-const cell = document.createElement("div");
-cell.classList.add("cell");
-cell.dataset.x = col;
-cell.dataset.y = row;
-if (occupiedCells[key]) cell.style.background = occupiedCells[key].color;
-cell.addEventListener("click", () => openPopup(cell));
-fragment.appendChild(cell);
-}
-}
-grid.appendChild(fragment);
-}
-
-renderGrid();
-updateCounter();
-
-// ==================== Popup acquisto ====================
+// ==================== Popup & Click ====================
 let selectedCell = null;
-function openPopup(cell) {
-selectedCell = cell;
+canvas.addEventListener("click",(e)=>{
+const rect = canvas.getBoundingClientRect();
+const x = Math.floor((e.clientX - rect.left)/CELL_SIZE);
+const y = Math.floor((e.clientY - rect.top)/CELL_SIZE);
+selectedCell = {x,y};
 document.getElementById("popup").classList.remove("hidden");
-const key = `${cell.dataset.x}_${cell.dataset.y}`;
-if (occupiedCells[key]) {
+const key = `${x}_${y}`;
+if(occupiedCells[key]){
 document.getElementById("cellText").value = occupiedCells[key].text;
 document.getElementById("cellColor").value = occupiedCells[key].color;
 document.getElementById("cellLink").value = occupiedCells[key].link;
-} else {
+}else{
 document.getElementById("cellText").value = "";
 document.getElementById("cellColor").value = "#ffffff";
 document.getElementById("cellLink").value = "";
 }
-}
+});
 
-function closePopup() {
+function closePopup(){
 document.getElementById("popup").classList.add("hidden");
 }
 
 // Simula acquisto
-document.getElementById("buyButton").addEventListener("click", () => {
-if (!selectedCell) return;
-const x = selectedCell.dataset.x;
-const y = selectedCell.dataset.y;
-const key = `${x}_${y}`;
-occupiedCells[key] = {
+document.getElementById("buyButton").addEventListener("click",()=>{
+if(!selectedCell) return;
+const key = `${selectedCell.x}_${selectedCell.y}`;
+occupiedCells[key]={
 text: document.getElementById("cellText").value,
 color: document.getElementById("cellColor").value,
 link: document.getElementById("cellLink").value
 };
-selectedCell.style.background = occupiedCells[key].color;
+drawGrid();
 updateCounter();
 closePopup();
 });
 
 // ==================== Ricerca ====================
-function searchCell() {
+function searchCell(){
 const query = document.getElementById("searchInput").value.trim().toLowerCase();
-if (!query) return;
-// reset highlight
-document.querySelectorAll(".cell").forEach(c => c.classList.remove("highlight"));
+if(!query) return;
 
-// Ricerca coordinate
+// Reset canvas highlight
+drawGrid();
+
+// Coordinate
 const coordMatch = query.match(/^(\d+)[,_ ](\d+)$/);
-if (coordMatch) {
-const x = parseInt(coordMatch[1]);
-const y = parseInt(coordMatch[2]);
-const key = `${x}_${y}`;
-const cell = [...document.querySelectorAll(".cell")].find(c => c.dataset.x==x && c.dataset.y==y);
-if (cell) {
-cell.classList.add("highlight");
-cell.scrollIntoView({behavior:"smooth",block:"center"});
-}
+if(coordMatch){
+const x=parseInt(coordMatch[1]);
+const y=parseInt(coordMatch[2]);
+ctx.strokeStyle="yellow";
+ctx.lineWidth=2;
+ctx.strokeRect(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+canvas.scrollIntoView({behavior:"smooth"});
 return;
 }
 
-// Ricerca per nome/contenuto
-for (let key in occupiedCells) {
-if (occupiedCells[key].text.toLowerCase().includes(query)) {
-const [x,y] = key.split("_");
-const cell = [...document.querySelectorAll(".cell")].find(c => c.dataset.x==x && c.dataset.y==y);
-if (cell) {
-cell.classList.add("highlight");
-}
+// Nome/contenuto
+for(let key in occupiedCells){
+if(occupiedCells[key].text.toLowerCase().includes(query)){
+const [x,y]=key.split("_").map(Number);
+ctx.strokeStyle="yellow";
+ctx.lineWidth=2;
+ctx.strokeRect(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
 }
 }
