@@ -2,54 +2,60 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <header>
-<h1 id="titleText"></h1>
-
+<h1 id="titleText">Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
+<div>
+<label for="languageSelect">Lingua:</label>
 <select id="languageSelect">
 <option value="it">Italiano</option>
 <option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="pt">Português</option>
+<option value="ru">Русский</option>
+<option value="ko">한국어</option>
+<option value="zh">中文</option>
+<option value="ar">العربية</option>
+<option value="hi">हिन्दी</option>
+<option value="pl">Polski</option>
+<option value="sv">Svenska</option>
+<option value="no">Norsk</option>
+<option value="fi">Suomi</option>
+<option value="da">Dansk</option>
+<option value="ja">日本語</option>
 </select>
+</div>
 </header>
 
-<div id="infoBar">
-🟩 <span id="freeLabel"></span>: <span id="freeCount"></span>
-|
-🟥 <span id="usedLabel"></span>: <span id="usedCount"></span>
-|
-🟦 <span id="selectedLabel">Selezionate</span>: <span id="selectedCount">0</span>
+<div id="searchBar" style="text-align:center; margin:10px 0;">
+<input type="text" id="searchInput" placeholder="Inserisci parola chiave o coordinate X,Y">
+<button id="searchBtn">Cerca</button>
 </div>
 
 <canvas id="grid"></canvas>
 
-<!-- POPUP -->
-<div id="popup" class="hidden">
-<h3 id="popupTitle"></h3>
-
-<input id="title" placeholder="Nome / Titolo">
-<input id="color" type="color">
-<input id="link" placeholder="Link (https://)">
-<input id="image" placeholder="URL immagine (opzionale)">
-<textarea id="text" placeholder="Testo breve"></textarea>
-
-<label>
-<input type="checkbox" id="acceptTerms">
-<span id="acceptTermsText"></span>
-<a href="terms.html" target="_blank" id="termsLink"></a>
-</label>
-
-<button id="buyBtn" disabled></button>
-<button id="cancelBtn"></button>
+<div id="counters" style="text-align:center; margin-top:10px;">
+<span id="freeLabel">Celle libere</span>: <span id="freeCount">0</span>
+<span id="usedLabel">Celle occupate</span>: <span id="usedCount">0</span>
+<span id="selectedLabel">Selezionate</span>: <span id="selectedCount">0</span>
 </div>
 
-<footer>
-<a href="terms.html" target="_blank" id="footerTerms"></a> |
-© <span id="year"></span> Pixel Kingdom – Tutti i diritti riservati
+<div id="popup" class="hidden">
+<h2 id="popupTitle">Acquista celle selezionate</h2>
+<label for="cellTitleInput">Titolo / Nome:</label>
+<input type="text" id="cellTitleInput" placeholder="Es. Foto Cane">
+<button id="buyBtn">Acquista</button>
+<button id="cancelBtn">Annulla</button>
+</div>
+
+<footer style="text-align:center; margin-top:20px;">
+<a href="terms.html" id="termsLink">Termini e Condizioni</a> | <span>&copy; <span id="year"></span> Pixel Kingdom. Tutti i diritti riservati.</span>
 </footer>
 
 <script src="script.js"></script>
