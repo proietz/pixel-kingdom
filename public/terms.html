@@ -1,63 +1,68 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Termini e Condizioni</title>
+<title>Terms & Conditions - Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
-<h1 id="titleText">Termini e Condizioni</h1>
-<div>
-<label for="languageSelect">Lingua:</label>
-<select id="languageSelect"></select>
-</div>
+<h1>Terms & Conditions</h1>
+<select id="langSelectTerms">
+<option value="en">English</option>
+<option value="it">Italiano</option>
+<option value="fr">Français</option>
+<option value="es">Español</option>
+<option value="de">Deutsch</option>
+<option value="ru">Русский</option>
+<option value="ko">한국어</option>
+<option value="ja">日本語</option>
+<option value="zh">中文</option>
+<option value="ar">العربية</option>
+<option value="hi">हिंदी</option>
+<option value="pl">Polski</option>
+<option value="sv">Svenska</option>
+<option value="no">Norsk</option>
+<option value="da">Dansk</option>
+</select>
 </header>
 
-<main>
-<p id="termsContent"></p>
+<main id="termsContent">
+<p>All users are responsible for the content they post. No illegal or copyrighted material without permission.</p>
 </main>
 
 <script>
-const languages = {
-it:{title:"Termini e Condizioni", content:`- Gli utenti sono responsabili dei contenuti inseriti.<br>- Nessuna carta di pagamento salvata sul server.<br>- Vietato pubblicare contenuti illegali, offensivi o protetti da copyright.<br>- Pixel Kingdom può rimuovere contenuti inappropriati.<br>- Acquisto celle vincolante, non rimborsabile.<br>- Coordinate celle acquistate sono di proprietà dell'acquirente.`},
-en:{title:"Terms & Conditions", content:`- Users are responsible for their content.<br>- No payment card is stored.<br>- Illegal/offensive/copyright content prohibited.<br>- Pixel Kingdom may remove inappropriate content.<br>- Cell purchases are binding and non-refundable.<br>- Coordinates of purchased cells are owned by buyer.`},
-fr:{title:"Conditions", content:"..."},
-es:{title:"Términos y Condiciones", content:"..."},
-de:{title:"AGB", content:"..."},
-ru:{title:"Условия", content:"..."},
-ko:{title:"약관", content:"..."},
-ja:{title:"利用規約", content:"..."},
-zh:{title:"条款", content:"..."},
-ar:{title:"الشروط", content:"..."},
-hi:{title:"नियम और शर्तें", content:"..."},
-pl:{title:"Warunki", content:"..."},
-sv:{title:"Villkor", content:"..."},
-no:{title:"Vilkår", content:"..."},
-da:{title:"Vilkår", content:"..."}
+const termsTexts = {
+en: "All users are responsible for the content they post. No illegal or copyrighted material without permission.",
+it: "Tutti gli utenti sono responsabili dei contenuti pubblicati. Nessun materiale illegale o protetto da copyright senza permesso.",
+fr: "Tous les utilisateurs sont responsables du contenu qu'ils publient. Aucun contenu illégal ou protégé par copyright sans autorisation.",
+es: "Todos los usuarios son responsables del contenido que publican. No se permite material ilegal o protegido por derechos de autor sin permiso.",
+de: "Alle Benutzer sind für die Inhalte verantwortlich, die sie posten. Kein illegales oder urheberrechtlich geschütztes Material ohne Erlaubnis.",
+ru: "Все пользователи несут ответственность за размещаемый ими контент. Никакого незаконного или защищенного авторским правом материала без разрешения.",
+ko: "모든 사용자는 게시하는 콘텐츠에 대해 책임이 있습니다. 허가 없는 불법 또는 저작권 보호 자료 금지.",
+ja: "すべてのユーザーは投稿するコンテンツに責任があります。許可のない違法または著作権保護された素材は禁止です。",
+zh: "所有用户对其发布的内容负责。未经许可不得发布非法或受版权保护的材料。",
+ar: "جميع المستخدمين مسؤولون عن المحتوى الذي ينشرونه. لا مواد غير قانونية أو محمية بحقوق الطبع والنشر بدون إذن.",
+hi: "सभी उपयोगकर्ता अपनी पोस्ट की गई सामग्री के लिए जिम्मेदार हैं। बिना अनुमति किसी अवैध या कॉपीराइट सामग्री की अनुमति नहीं।",
+pl: "Wszyscy użytkownicy są odpowiedzialni za treści, które publikują. Brak nielegalnych lub chronionych prawem autorskim materiałów bez pozwolenia.",
+sv: "Alla användare ansvarar för innehållet de publicerar. Inget olagligt eller upphovsrättsskyddat material utan tillstånd.",
+no: "Alle brukere er ansvarlige for innholdet de legger ut. Ingen ulovlig eller opphavsrettsbeskyttet materiale uten tillatelse.",
+da: "Alle brugere er ansvarlige for det indhold, de poster. Intet ulovligt eller ophavsretligt beskyttet materiale uden tilladelse."
 };
 
-let currentLang = navigator.language.slice(0,2);
-if(!languages[currentLang]) currentLang="en";
+const langSelect = document.getElementById("langSelectTerms");
+const termsContent = document.getElementById("termsContent");
 
-function updateLanguage(){
-const lang = languages[currentLang];
-document.getElementById("titleText").textContent = lang.title;
-document.getElementById("termsContent").innerHTML = lang.content;
-}
+langSelect.addEventListener("change", e=>{
+const lang = e.target.value;
+termsContent.textContent = termsTexts[lang];
+});
 
-const langSelect = document.getElementById("languageSelect");
-for(const code in languages){
-const opt = document.createElement("option");
-opt.value = code;
-opt.textContent = code.toUpperCase();
-if(code===currentLang) opt.selected=true;
-langSelect.appendChild(opt);
-}
-langSelect.addEventListener("change",(e)=>{ currentLang=e.target.value; updateLanguage(); });
-
-updateLanguage();
+// lingua default inglese
+termsContent.textContent = termsTexts['en'];
 </script>
+
 </body>
 </html>

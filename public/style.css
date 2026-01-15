@@ -1,88 +1,74 @@
 body {
 margin: 0;
 font-family: Arial, sans-serif;
-background-color: #000;
+background: #000;
 color: #fff;
 }
 
 header {
+background: #111;
 padding: 10px;
-background-color: #111;
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-#headerTop {
 display: flex;
 justify-content: space-between;
-align-items: center;
 }
 
-#topLinks a {
-color: #fff;
-text-decoration: none;
-margin-right: 10px;
+.top-bar .left span {
+margin-right: 5px;
 }
 
-#languageContainer {
+.greenBox, .redBox {
+display: inline-block;
+width: 15px;
+height: 15px;
+margin-left: 5px;
+vertical-align: middle;
+}
+
+.greenBox { background: green; }
+.redBox { background: red; }
+
+.top-bar .right select, .top-bar .right a {
 margin-left: 10px;
 }
 
-#counters {
-display: flex;
-gap: 20px;
-font-weight: bold;
-}
-
-#searchBar {
-margin-top: 10px;
-}
-
-#searchBar input {
-width: 200px;
-padding: 5px;
-}
-
-#searchBar button {
-padding: 5px 10px;
-font-size: 14px;
+.info {
+text-align: center;
+margin: 10px 0;
 }
 
 canvas#grid {
 display: block;
-width: 100vw;
-height: 80vh;
-border: 2px solid #fff;
+margin: auto;
+border: 1px solid #333;
 }
 
 #popup {
+display: none;
 position: fixed;
-top: 50%;
+top: 20%;
 left: 50%;
-transform: translate(-50%, -50%);
-background-color: #222;
-color: #fff;
+transform: translateX(-50%);
+background: #222;
 padding: 20px;
 border: 2px solid #fff;
 z-index: 1000;
-display: none;
 }
 
 #popup input {
 display: block;
-margin-bottom: 10px;
-width: 100%;
-padding: 5px;
+margin: 5px 0;
 }
 
-#popup button {
-margin-top: 5px;
-padding: 5px 10px;
-}
-
-footer {
+.search-bar {
 text-align: center;
-padding: 10px;
-background-color: #111;
+margin: 10px;
+}
+
+.search-bar input {
+padding: 5px;
+width: 200px;
+}
+
+.search-bar button {
+padding: 5px 10px;
 }

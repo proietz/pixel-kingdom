@@ -1,25 +1,25 @@
 const canvas = document.getElementById("grid");
 const ctx = canvas.getContext("2d");
 
-let cellSize = 10; // dimensione cella
-const rows = 1415; // circa 2 milioni celle: 1415x1415 ~ 2.003.225
+const cellSize = 10;
+const rows = 1415;
 const cols = 1415;
 
 canvas.width = cols * cellSize;
 canvas.height = rows * cellSize;
 
-// Stato celle
+// Celle inizialmente tutte null
 let cells = Array.from({length: rows}, () => Array(cols).fill(null));
 
-// Selezione
 let selecting = false;
 let startX = 0, startY = 0;
 let selectedCells = [];
 
-let currentLang = navigator.language.slice(0,2);
+let currentLang = 'en'; // default inglese
+
 const languages = {
-it: {buyPopupTitle:"Acquista celle selezionate"},
 en: {buyPopupTitle:"Buy selected cells"},
+it: {buyPopupTitle:"Acquista celle selezionate"},
 fr: {buyPopupTitle:"Acheter les cellules"},
 es: {buyPopupTitle:"Comprar celdas"},
 de: {buyPopupTitle:"Zellen kaufen"},
@@ -35,16 +35,15 @@ no: {buyPopupTitle:"Kjøp valgte celler"},
 da: {buyPopupTitle:"Køb valgte celler"}
 };
 
-// Canvas zoom
+// Zoom canvas
 let scale = 1;
-canvas.addEventListener("wheel", (e)=>{
+canvas.addEventListener("wheel", e=>{
 e.preventDefault();
 scale += e.deltaY * -0.001;
-scale = Math.min(Math.max(.1, scale), 10);
+scale = Math.min(Math.max(0.1, scale), 10);
 canvas.style.transform = `scale(${scale})`;
 });
 
-// Disegna la griglia
 function drawGrid(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 for(let r=0;r<rows;r++){
@@ -61,7 +60,6 @@ ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
 }
 drawGrid();
 
-// Aggiorna contatori
 function updateCounters(){
 let free=0, used=0;
 for(let r=0;r<rows;r++){
@@ -74,7 +72,7 @@ document.getElementById("usedCount").textContent=used;
 document.getElementById("selectedCount").textContent=selectedCells.length;
 }
 
-// Mouse selection
+// Selezione click/drag
 canvas.addEventListener("mousedown", e=>{
 selecting=true;
 const rect = canvas.getBoundingClientRect();
@@ -117,7 +115,7 @@ ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
 });
 }
 
-// Popup gestione
+// Popup acquisto
 const popup = document.getElementById("popup");
 const buyBtn = document.getElementById("buyBtn");
 const cancelBtn = document.getElementById("cancelBtn");
@@ -129,7 +127,6 @@ document.getElementById("popupTitle").textContent = languages[currentLang].buyPo
 
 cancelBtn.addEventListener("click", ()=>{ popup.style.display="none"; });
 
-// Buy simulato
 buyBtn.addEventListener("click", ()=>{
 const title = document.getElementById("cellTitleInput").value.trim();
 const text = document.getElementById("cellTextInput").value;
@@ -137,16 +134,17 @@ const color = document.getElementById("cellColorInput").value;
 const link = document.getElementById("cellLinkInput").value;
 const img = document.getElementById("cellImageInput").value;
 
-if(!title){ alert("Inserisci un titolo"); return; }
+if(!title){ alert("Insert a title"); return; }
 
 selectedCells.forEach(([r,c])=>{
 cells[r][c] = {title,text,color,link,img};
 });
+
+alert(`Purchase completed!\nTitle: ${title}\nCells: ${selectedCells.length}`);
 popup.style.display="none";
 selectedCells = [];
 drawGrid();
 updateCounters();
-alert(`Acquisto completato!\nTitolo: ${title}\nCelle: ${selectedCells.length}`);
 });
 
 // Ricerca
@@ -169,4 +167,10 @@ ctx.strokeStyle = "blue";
 ctx.lineWidth=2;
 ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
 });
+});
+
+// Cambia lingua dal menu
+document.getElementById("langSelect").addEventListener("change", e=>{
+currentLang = e.target.value;
+document.getElementById("popupTitle").textContent = languages[currentLang].buyPopupTitle;
 });

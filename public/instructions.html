@@ -1,87 +1,67 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Come usare il sito</title>
+<title>How to Use - Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <header>
-<h1 id="titleText">Come usare Pixel Kingdom</h1>
-<div>
-<label for="languageSelect">Lingua:</label>
-<select id="languageSelect"></select>
-</div>
+<h1>How to Use Pixel Kingdom</h1>
+<select id="langSelectInstr">
+<option value="en">English</option>
+<option value="it">Italiano</option>
+<option value="fr">Français</option>
+<option value="es">Español</option>
+<option value="de">Deutsch</option>
+<option value="ru">Русский</option>
+<option value="ko">한국어</option>
+<option value="ja">日本語</option>
+<option value="zh">中文</option>
+<option value="ar">العربية</option>
+<option value="hi">हिंदी</option>
+<option value="pl">Polski</option>
+<option value="sv">Svenska</option>
+<option value="no">Norsk</option>
+<option value="da">Dansk</option>
+</select>
 </header>
 
-<main>
-<ul id="instructionsContent"></ul>
+<main id="instrContent">
+<p>
+- Click on a cell to select it, or click and drag to select multiple cells.<br>
+- Use the popup to fill in title (required), text, color, link, or image.<br>
+- Zoom in/out with the mouse wheel.<br>
+- You can search by keyword or by coordinates in the search bar.<br>
+- Cells purchased will show their title and coordinates after buying.<br>
+- Price: 1€ per cell.<br>
+- The grid is always black initially; only purchased cells show color.
+</p>
 </main>
 
 <script>
-const languages = {
-it:{title:"Come usare Pixel Kingdom", content:[
-"Clicca su una cella per selezionarla singolarmente.",
-"Trascina il mouse per selezionare più celle contemporaneamente.",
-"Inserisci un titolo obbligatorio, testo, colore, link o immagine.",
-"Premi Acquista per confermare l’acquisto delle celle selezionate.",
-"Le coordinate delle celle acquistate saranno mostrate nel popup.",
-"Usa la barra di ricerca per trovare celle per titolo o coordinate.",
-"Usa lo zoom con la rotella del mouse per ingrandire o ridurre la griglia.",
-"Tutte le istruzioni e popup si adattano alla lingua selezionata o rilevata automaticamente."
-]},
-en:{title:"How to use Pixel Kingdom", content:[
-"Click a cell to select it individually.",
-"Drag the mouse to select multiple cells at once.",
-"Enter a required title, text, color, link or image.",
-"Press Buy to confirm the selected cells purchase.",
-"The coordinates of purchased cells will be shown in a popup.",
-"Use the search bar to find cells by title or coordinates.",
-"Use mouse wheel to zoom in/out the grid.",
-"All instructions and popups adapt to the selected or detected language."
-]},
-fr:{title:"Comment utiliser Pixel Kingdom", content:["..."]},
-es:{title:"Cómo usar Pixel Kingdom", content:["..."]},
-de:{title:"Pixel Kingdom Anleitung", content:["..."]},
-ru:{title:"Как использовать Pixel Kingdom", content:["..."]},
-ko:{title:"Pixel Kingdom 사용법", content:["..."]},
-ja:{title:"Pixel Kingdomの使い方", content:["..."]},
-zh:{title:"Pixel Kingdom使用说明", content:["..."]},
-ar:{title:"كيفية استخدام Pixel Kingdom", content:["..."]},
-hi:{title:"Pixel Kingdom का उपयोग कैसे करें", content:["..."]},
-pl:{title:"Jak używać Pixel Kingdom", content:["..."]},
-sv:{title:"Hur man använder Pixel Kingdom", content:["..."]},
-no:{title:"Hvordan bruke Pixel Kingdom", content:["..."]},
-da:{title:"Sådan bruger du Pixel Kingdom", content:["..."]}
+const instrTexts = {
+en: "- Click on a cell to select it, or click and drag to select multiple cells.\n- Use the popup to fill in title (required), text, color, link, or image.\n- Zoom in/out with the mouse wheel.\n- You can search by keyword or by coordinates in the search bar.\n- Cells purchased will show their title and coordinates after buying.\n- Price: 1€ per cell.\n- The grid is always black initially; only purchased cells show color.",
+it: "- Clicca su una cella per selezionarla o clicca e trascina per selezionare più celle.\n- Usa il popup per inserire titolo (obbligatorio), testo, colore, link o immagine.\n- Zoom avanti/indietro con la rotella del mouse.\n- Puoi cercare per parola chiave o coordinate nella barra di ricerca.\n- Le celle acquistate mostreranno titolo e coordinate.\n- Prezzo: 1€ per cella.\n- La griglia è sempre nera inizialmente; solo le celle acquistate mostrano colore.",
+fr: "- Cliquez sur une cellule pour la sélectionner, ou cliquez et faites glisser pour sélectionner plusieurs cellules.\n- Utilisez le popup pour remplir le titre (obligatoire), texte, couleur, lien ou image.\n- Zoom avant/arrière avec la molette de la souris.\n- Vous pouvez rechercher par mot-clé ou coordonnées.\n- Les cellules achetées afficheront le titre et les coordonnées.\n- Prix : 1€ par cellule.\n- La grille est toujours noire au départ ; seules les cellules achetées affichent une couleur.",
+es: "- Haz clic en una celda para seleccionarla, o clic y arrastra para seleccionar varias celdas.\n- Usa el popup para rellenar título (obligatorio), texto, color, enlace o imagen.\n- Zoom con la rueda del ratón.\n- Puedes buscar por palabra clave o coordenadas.\n- Las celdas compradas mostrarán título y coordenadas.\n- Precio: 1€ por celda.\n- La cuadrícula siempre es negra; solo las compradas muestran color.",
+de: "- Klicken Sie auf eine Zelle, um sie auszuwählen, oder klicken und ziehen Sie, um mehrere Zellen auszuwählen.\n- Verwenden Sie das Popup, um Titel (erforderlich), Text, Farbe, Link oder Bild auszufüllen.\n- Zoom mit dem Mausrad.\n- Sie können nach Stichwort oder Koordinaten suchen.\n- Gekaufte Zellen zeigen Titel und Koordinaten an.\n- Preis: 1€ pro Zelle.\n- Das Raster ist standardmäßig schwarz; nur gekaufte Zellen zeigen Farbe."
+// puoi aggiungere altre lingue seguendo lo stesso schema
 };
 
-let currentLang = navigator.language.slice(0,2);
-if(!languages[currentLang]) currentLang="en";
+const langSelect = document.getElementById("langSelectInstr");
+const instrContent = document.getElementById("instrContent");
 
-function updateLanguage(){
-const lang = languages[currentLang];
-document.getElementById("titleText").textContent = lang.title;
-const ul = document.getElementById("instructionsContent");
-ul.innerHTML="";
-lang.content.forEach(line=>{
-const li=document.createElement("li");
-li.textContent=line;
-ul.appendChild(li);
+langSelect.addEventListener("change", e=>{
+const lang = e.target.value;
+instrContent.textContent = instrTexts[lang] || instrTexts['en'];
 });
-}
 
-const langSelect = document.getElementById("languageSelect");
-for(const code in languages){
-const opt = document.createElement("option");
-opt.value = code;
-opt.textContent = code.toUpperCase();
-if(code===currentLang) opt.selected=true;
-langSelect.appendChild(opt);
-}
-langSelect.addEventListener("change",(e)=>{ currentLang=e.target.value; updateLanguage(); });
-
-updateLanguage();
+// lingua default inglese
+instrContent.textContent = instrTexts['en'];
 </script>
+
 </body>
 </html>
