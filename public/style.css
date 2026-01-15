@@ -1,83 +1,40 @@
 body {
-background: linear-gradient(120deg, #1a1a1a, #333);
-font-family: 'Roboto', sans-serif;
-color: #fff;
-margin: 0;
-padding: 0;
-}
-
-header {
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px;
-font-size: 1.5rem;
-}
-
-#langSelector {
-font-size: 1rem;
-margin-top: 10px;
-}
-
-#infoText {
+background: black;
+color: white;
+font-family: Arial;
 text-align: center;
-font-size: 1.2rem;
-color: #ffcc00;
-margin-top: 10px;
-}
-
-#counter {
-margin-top: 10px;
-display: flex;
-gap: 15px;
-align-items: center;
-}
-
-.status-square {
-width: 15px;
-height: 15px;
-background-color: green;
-border: 1px solid #fff;
-}
-
-#searchPanel {
-margin-top: 10px;
-display: flex;
-gap: 5px;
 }
 
 canvas {
+border: 2px solid #444;
+margin: 20px auto;
 display: block;
-margin: 10px auto;
-border: 1px solid #555;
 }
 
-.popup {
+#popup {
 position: fixed;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
-background: #222;
-border: 2px solid #555;
+background: #111;
 padding: 20px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-z-index: 1000;
+border: 1px solid #555;
 }
 
 .hidden {
 display: none;
 }
 
-.highlightRect {
-stroke: yellow;
-lineWidth: 2;
+input, textarea {
+width: 100%;
+margin: 5px 0;
 }
 
-footer {
-text-align: center;
-padding: 10px;
-font-size: 0.8rem;
-color: #aaa;
+button {
+margin-top: 10px;
+}
+
+.terms-box {
+font-size: 13px;
+margin-top: 10px;
 }

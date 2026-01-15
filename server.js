@@ -14,34 +14,19 @@ const db = new sqlite3.Database("./pixelkingdom.db");
 db.serialize(() => {
 db.run(`
 CREATE TABLE IF NOT EXISTS cells (
-cellId INTEGER PRIMARY KEY,
-text TEXT,
-link TEXT,
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+x INTEGER,
+y INTEGER,
+title TEXT,
 color TEXT,
-created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+link TEXT,
+text TEXT,
+image TEXT
 )
 `);
 });
 
-app.post("/api/buyCell", (req, res) => {
-const { cellId, text, link, color } = req.body;
-
-db.get("SELECT cellId FROM cells WHERE cellId = ?", [cellId], (err, row) => {
-if (row) {
-return res.json({ success: false });
-}
-
-db.run(
-"INSERT INTO cells (cellId, text, link, color) VALUES (?, ?, ?, ?)",
-[cellId, text, link, color],
-err => {
-if (err) return res.json({ success: false });
-res.json({ success: true });
-}
-);
-});
-});
-
+// carica celle
 app.get("/api/loadCells", (req, res) => {
 db.all("SELECT * FROM cells", [], (err, rows) => {
 if (err) return res.json([]);
@@ -49,6 +34,29 @@ res.json(rows);
 });
 });
 
+// acquisto blocco
+app.post("/api/buyBlock", (req, res) => {
+const { cells, title, color, link, text, image } = req.body;
+
+const placeholders = cells.map(() => "(?,?,?,?,?,?,?)").join(",");
+const values = [];
+
+cells.forEach(c => {
+values.push(c.x, c.y, title, color, link, text, image);
+});
+
+db.run(
+`INSERT INTO cells (x,y,title,color,link,text,image) VALUES ${placeholders}`,
+values,
+err => {
+if (err) {
+return res.json({ success: false });
+}
+res.json({ success: true });
+}
+);
+});
+
 app.listen(PORT, () => {
-console.log("Pixel Kingdom attivo su http://localhost:3000");
+console.log(`Pixel Kingdom online su http://localhost:${PORT}`);
 });

@@ -1,57 +1,40 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header>
-<div id="title">Pixel Kingdom</div>
-<div id="langSelector">
-<label id="langLabel">Lingua:</label>
-<select onchange="changeLanguage(this.value)">
-<option value="it">Italiano</option>
-<option value="en">English</option>
-<option value="es">Español</option>
-<option value="fr">Français</option>
-<option value="de">Deutsch</option>
-<option value="zh">中文</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-</select>
-</div>
-<div id="infoText">1 milione di celle — 1€ per cella</div>
+<h1>Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
 
-<div id="counter">
-<span id="occupiedCounter">Occupate: 0</span>
-<span id="availableCounter">Disponibili: 1000000</span>
-<span class="status-square" id="statusSquare"></span>
+<div id="controls">
+<span id="counter"></span>
 </div>
 
-<div id="searchPanel">
-<input type="text" id="searchInput" placeholder="Inserisci coordinate o nome..." />
-<button onclick="searchCell()">Cerca</button>
+<canvas id="grid"></canvas>
+
+<!-- POPUP -->
+<div id="popup" class="hidden">
+<h3>Acquista celle selezionate</h3>
+
+<input id="title" placeholder="Nome / Titolo">
+<input id="color" type="color">
+<input id="link" placeholder="Link (https://)">
+<input id="image" placeholder="URL immagine (opzionale)">
+<textarea id="text" placeholder="Testo breve"></textarea>
+
+<div class="terms-box">
+<label>
+<input type="checkbox" id="acceptTerms">
+Accetto i <a href="terms.html" target="_blank">Termini e Condizioni</a>
+</label>
 </div>
-</header>
 
-<main>
-<canvas id="gridCanvas" width="10000" height="10000"></canvas>
-</main>
-
-<div id="popup" class="popup hidden">
-<h3 id="popupTitle">Acquista Cella</h3>
-<input type="text" id="cellText" placeholder="Nome/Contenuto"/>
-<input type="color" id="cellColor" value="#ffffff"/>
-<input type="text" id="cellLink" placeholder="Link opzionale"/>
-<button id="buyButton">Acquista Cella</button>
-<button onclick="closePopup()">Chiudi</button>
+<button id="buyBtn" disabled>Acquista</button>
+<button onclick="closePopup()">Annulla</button>
 </div>
-
-<footer>
-Pixel Kingdom © 2026 - Tutti i diritti riservati
-</footer>
 
 <script src="script.js"></script>
 </body>
