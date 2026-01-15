@@ -7,17 +7,32 @@
 </head>
 
 <body>
-<h1>Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
 
-<div id="controls">
-<span id="counter"></span>
+<header>
+<h1 id="titleText">Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
+
+<select id="languageSelect">
+<option value="it">Italiano</option>
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="ru">Русский</option>
+<option value="ko">한국어</option>
+<option value="zh">中文</option>
+</select>
+</header>
+
+<div id="infoBar">
+<span id="freeBox">🟩 Celle libere: <span id="freeCount"></span></span>
+<span id="usedBox">🟥 Celle occupate: <span id="usedCount"></span></span>
 </div>
 
 <canvas id="grid"></canvas>
 
 <!-- POPUP -->
 <div id="popup" class="hidden">
-<h3>Acquista celle selezionate</h3>
+<h3 id="popupTitle">Acquista celle selezionate</h3>
 
 <input id="title" placeholder="Nome / Titolo">
 <input id="color" type="color">
@@ -28,13 +43,20 @@
 <div class="terms-box">
 <label>
 <input type="checkbox" id="acceptTerms">
+<span id="termsText">
 Accetto i <a href="terms.html" target="_blank">Termini e Condizioni</a>
+</span>
 </label>
 </div>
 
 <button id="buyBtn" disabled>Acquista</button>
 <button onclick="closePopup()">Annulla</button>
 </div>
+
+<footer>
+<a href="terms.html" target="_blank">Termini e Condizioni</a> |
+<span>© <span id="year"></span> Pixel Kingdom – Tutti i diritti riservati</span>
+</footer>
 
 <script src="script.js"></script>
 </body>
