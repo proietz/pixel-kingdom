@@ -1,74 +1,53 @@
 body {
 margin: 0;
 font-family: Arial, sans-serif;
-background: #000;
+background-color: #111;
 color: #fff;
-}
-
-header {
-background: #111;
-padding: 10px;
-display: flex;
-justify-content: space-between;
-}
-
-.top-bar .left span {
-margin-right: 5px;
-}
-
-.greenBox, .redBox {
-display: inline-block;
-width: 15px;
-height: 15px;
-margin-left: 5px;
-vertical-align: middle;
-}
-
-.greenBox { background: green; }
-.redBox { background: red; }
-
-.top-bar .right select, .top-bar .right a {
-margin-left: 10px;
-}
-
-.info {
 text-align: center;
+}
+
+h1 {
+margin: 20px 0;
+}
+
+#counters {
 margin: 10px 0;
 }
 
-canvas#grid {
+#freeCells, #occupiedCells {
+margin: 0 10px;
+font-weight: bold;
+}
+
+#colorIndicator {
+display: inline-block;
+width: 20px;
+height: 20px;
+vertical-align: middle;
+border-radius: 4px;
+margin-left: 10px;
+background-color: green; /* verde iniziale per celle libere */
+}
+
+#pixelCanvas {
 display: block;
-margin: auto;
-border: 1px solid #333;
+margin: 0 auto;
+background-color: black; /* canvas completamente nero */
+cursor: crosshair;
 }
 
-#popup {
-display: none;
-position: fixed;
-top: 20%;
-left: 50%;
-transform: translateX(-50%);
-background: #222;
-padding: 20px;
-border: 2px solid #fff;
-z-index: 1000;
+#searchContainer {
+margin: 20px 0;
 }
 
-#popup input {
-display: block;
-margin: 5px 0;
-}
-
-.search-bar {
-text-align: center;
-margin: 10px;
-}
-
-.search-bar input {
+#searchInput {
+width: 300px;
 padding: 5px;
-width: 200px;
+font-size: 14px;
 }
 
-.search-bar button {
+#searchBtn {
 padding: 5px 10px;
+font-size: 14px;
+cursor: pointer;
 }

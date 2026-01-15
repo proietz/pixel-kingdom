@@ -3,64 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to Use - Pixel Kingdom</title>
-<link rel="stylesheet" href="style.css">
+<title>How to Use Pixel Kingdom</title>
+<style>
+body { font-family: Arial; padding: 20px; background: #111; color: #fff; }
+select { margin-bottom: 20px; }
+</style>
 </head>
 <body>
 
-<header>
-<h1>How to Use Pixel Kingdom</h1>
-<select id="langSelectInstr">
+<h1 id="title">How to Use Pixel Kingdom</h1>
+
+<label for="languageSelect">Select Language:</label>
+<select id="languageSelect">
 <option value="en">English</option>
 <option value="it">Italiano</option>
-<option value="fr">Français</option>
 <option value="es">Español</option>
+<option value="fr">Français</option>
 <option value="de">Deutsch</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-<option value="ja">日本語</option>
 <option value="zh">中文</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="ru">Русский</option>
 <option value="ar">العربية</option>
-<option value="hi">हिंदी</option>
+<option value="hi">हिन्दी</option>
 <option value="pl">Polski</option>
-<option value="sv">Svenska</option>
-<option value="no">Norsk</option>
-<option value="da">Dansk</option>
 </select>
-</header>
 
-<main id="instrContent">
-<p>
-- Click on a cell to select it, or click and drag to select multiple cells.<br>
-- Use the popup to fill in title (required), text, color, link, or image.<br>
-- Zoom in/out with the mouse wheel.<br>
-- You can search by keyword or by coordinates in the search bar.<br>
-- Cells purchased will show their title and coordinates after buying.<br>
-- Price: 1€ per cell.<br>
-- The grid is always black initially; only purchased cells show color.
-</p>
-</main>
+<div id="content">
+<p>Welcome to Pixel Kingdom! Here is how to use the site:</p>
+<ul>
+<li>Click on a cell or click & drag to select multiple cells.</li>
+<li>Release the mouse to open the purchase popup.</li>
+<li>Fill in a title (required) and optionally text, color, link, or image.</li>
+<li>After purchase, your cells will display the chosen content.</li>
+<li>Use the search bar to find your purchased cells by title or coordinates.</li>
+<li>You can zoom in/out using your mouse wheel.</li>
+</ul>
+</div>
 
 <script>
-const instrTexts = {
-en: "- Click on a cell to select it, or click and drag to select multiple cells.\n- Use the popup to fill in title (required), text, color, link, or image.\n- Zoom in/out with the mouse wheel.\n- You can search by keyword or by coordinates in the search bar.\n- Cells purchased will show their title and coordinates after buying.\n- Price: 1€ per cell.\n- The grid is always black initially; only purchased cells show color.",
-it: "- Clicca su una cella per selezionarla o clicca e trascina per selezionare più celle.\n- Usa il popup per inserire titolo (obbligatorio), testo, colore, link o immagine.\n- Zoom avanti/indietro con la rotella del mouse.\n- Puoi cercare per parola chiave o coordinate nella barra di ricerca.\n- Le celle acquistate mostreranno titolo e coordinate.\n- Prezzo: 1€ per cella.\n- La griglia è sempre nera inizialmente; solo le celle acquistate mostrano colore.",
-fr: "- Cliquez sur une cellule pour la sélectionner, ou cliquez et faites glisser pour sélectionner plusieurs cellules.\n- Utilisez le popup pour remplir le titre (obligatoire), texte, couleur, lien ou image.\n- Zoom avant/arrière avec la molette de la souris.\n- Vous pouvez rechercher par mot-clé ou coordonnées.\n- Les cellules achetées afficheront le titre et les coordonnées.\n- Prix : 1€ par cellule.\n- La grille est toujours noire au départ ; seules les cellules achetées affichent une couleur.",
-es: "- Haz clic en una celda para seleccionarla, o clic y arrastra para seleccionar varias celdas.\n- Usa el popup para rellenar título (obligatorio), texto, color, enlace o imagen.\n- Zoom con la rueda del ratón.\n- Puedes buscar por palabra clave o coordenadas.\n- Las celdas compradas mostrarán título y coordenadas.\n- Precio: 1€ por celda.\n- La cuadrícula siempre es negra; solo las compradas muestran color.",
-de: "- Klicken Sie auf eine Zelle, um sie auszuwählen, oder klicken und ziehen Sie, um mehrere Zellen auszuwählen.\n- Verwenden Sie das Popup, um Titel (erforderlich), Text, Farbe, Link oder Bild auszufüllen.\n- Zoom mit dem Mausrad.\n- Sie können nach Stichwort oder Koordinaten suchen.\n- Gekaufte Zellen zeigen Titel und Koordinaten an.\n- Preis: 1€ pro Zelle.\n- Das Raster ist standardmäßig schwarz; nur gekaufte Zellen zeigen Farbe."
-// puoi aggiungere altre lingue seguendo lo stesso schema
+const texts = {
+en: {
+title: "How to Use Pixel Kingdom",
+content: "<p>Welcome to Pixel Kingdom! Here is how to use the site:</p><ul><li>Click on a cell or click & drag to select multiple cells.</li><li>Release the mouse to open the purchase popup.</li><li>Fill in a title (required) and optionally text, color, link, or image.</li><li>After purchase, your cells will display the chosen content.</li><li>Use the search bar to find your purchased cells by title or coordinates.</li><li>You can zoom in/out using your mouse wheel.</li></ul>"
+},
+it: {
+title: "Come Usare Pixel Kingdom",
+content: "<p>Benvenuto in Pixel Kingdom! Ecco come usare il sito:</p><ul><li>Clicca su una cella o clicca e trascina per selezionare più celle.</li><li>Rilascia il mouse per aprire il popup di acquisto.</li><li>Compila il titolo (obbligatorio) e opzionalmente testo, colore, link o immagine.</li><li>Dopo l'acquisto, le tue celle mostreranno il contenuto scelto.</li><li>Usa la barra di ricerca per trovare le celle acquistate per titolo o coordinate.</li><li>Puoi zoomare con la rotellina del mouse.</li></ul>"
+},
+es: {
+title: "Cómo Usar Pixel Kingdom",
+content: "<p>¡Bienvenido a Pixel Kingdom! Así se usa el sitio:</p><ul><li>Haz clic en una celda o haz clic y arrastra para seleccionar varias celdas.</li><li>Suelta el ratón para abrir el popup de compra.</li><li>Rellena el título (obligatorio) y opcionalmente texto, color, enlace o imagen.</li><li>Después de la compra, tus celdas mostrarán el contenido elegido.</li><li>Usa la barra de búsqueda para encontrar tus celdas compradas por título o coordenadas.</li><li>Puedes hacer zoom con la rueda del ratón.</li></ul>"
+},
+fr: {
+title: "Comment Utiliser Pixel Kingdom",
+content: "<p>Bienvenue sur Pixel Kingdom ! Voici comment utiliser le site :</p><ul><li>Cliquez sur une cellule ou cliquez et faites glisser pour en sélectionner plusieurs.</li><li>Relâchez la souris pour ouvrir le popup d'achat.</li><li>Remplissez le titre (obligatoire) et éventuellement texte, couleur, lien ou image.</li><li>Après l'achat, vos cellules afficheront le contenu choisi.</li><li>Utilisez la barre de recherche pour trouver vos cellules achetées par titre ou coordonnées.</li><li>Vous pouvez zoomer avec la molette de la souris.</li></ul>"
+},
+de: {
+title: "Wie man Pixel Kingdom benutzt",
+content: "<p>Willkommen bei Pixel Kingdom! So benutzen Sie die Seite:</p><ul><li>Klicken Sie auf eine Zelle oder klicken und ziehen Sie, um mehrere Zellen auszuwählen.</li><li>Lassen Sie die Maus los, um das Kauf-Popup zu öffnen.</li><li>Füllen Sie den Titel aus (erforderlich) und optional Text, Farbe, Link oder Bild.</li><li>Nach dem Kauf werden Ihre Zellen den gewählten Inhalt anzeigen.</li><li>Verwenden Sie die Suchleiste, um Ihre gekauften Zellen nach Titel oder Koordinaten zu finden.</li><li>Sie können mit dem Mausrad hinein- und herauszoomen.</li></ul>"
+},
+zh: {
+title: "如何使用 Pixel Kingdom",
+content: "<p>欢迎来到 Pixel Kingdom！使用方法如下：</p><ul><li>点击单元格或点击并拖动以选择多个单元格。</li><li>释放鼠标以打开购买弹窗。</li><li>填写标题（必填），可选文本、颜色、链接或图片。</li><li>购买后，您的单元格将显示所选内容。</li><li>使用搜索栏按标题或坐标查找购买的单元格。</li><li>可以使用鼠标滚轮缩放。</li></ul>"
+},
+ja: {
+title: "Pixel Kingdomの使い方",
+content: "<p>Pixel Kingdomへようこそ！使い方は以下の通りです：</p><ul><li>セルをクリック、またはクリック＆ドラッグで複数選択。</li><li>マウスを離すと購入ポップアップが開きます。</li><li>タイトル（必須）を入力し、任意でテキスト、色、リンク、画像を入力。</li><li>購入後、セルに選択した内容が表示されます。</li><li>検索バーで購入したセルをタイトルや座標で検索できます。</li><li>マウスホイールでズーム可能です。</li></ul>"
+},
+ko: {
+title: "Pixel Kingdom 사용법",
+content: "<p>Pixel Kingdom에 오신 것을 환영합니다! 사용 방법은 다음과 같습니다:</p><ul><li>셀을 클릭하거나 클릭 후 드래그하여 여러 셀 선택.</li><li>마우스를 놓으면 구매 팝업이 열립니다.</li><li>제목(필수)을 입력하고, 옵션으로 텍스트, 색상, 링크, 이미지 입력.</li><li>구매 후 선택한 내용이 셀에 표시됩니다.</li><li>검색 바를 사용해 제목이나 좌표로 구매한 셀 찾기.</li><li>마우스 휠로 확대/축소 가능합니다.</li></ul>"
+},
+ru: {
+title: "Как пользоваться Pixel Kingdom",
+content: "<p>Добро пожаловать в Pixel Kingdom! Вот как пользоваться сайтом:</p><ul><li>Кликните по ячейке или кликните и перетащите для выбора нескольких ячеек.</li><li>Отпустите мышь, чтобы открыть всплывающее окно покупки.</li><li>Заполните заголовок (обязательно) и по желанию текст, цвет, ссылку или изображение.</li><li>После покупки ваши ячейки покажут выбранное содержимое.</li><li>Используйте строку поиска, чтобы найти купленные ячейки по названию или координатам.</li><li>Можно масштабировать колесом мыши.</li></ul>"
+},
+ar: {
+title: "كيفية استخدام Pixel Kingdom",
+content: "<p>مرحبًا بك في Pixel Kingdom! إليك كيفية استخدام الموقع:</p><ul><li>انقر على خلية أو انقر واسحب لتحديد خلايا متعددة.</li><li>حرر الماوس لفتح نافذة الشراء.</li><li>املأ العنوان (إلزامي) واختياريًا النص، اللون، الرابط أو الصورة.</li><li>بعد الشراء، ستعرض خلاياك المحتوى المختار.</li><li>استخدم شريط البحث للعثور على الخلايا المشتراة بالعنوان أو الإحداثيات.</li><li>يمكنك التكبير/التصغير باستخدام عجلة الماوس.</li></ul>"
+},
+hi: {
+title: "Pixel Kingdom का उपयोग कैसे करें",
+content: "<p>Pixel Kingdom में आपका स्वागत है! साइट का उपयोग इस प्रकार है:</p><ul><li>एक सेल पर क्लिक करें या क्लिक करके खींचें ताकि कई सेल्स चुनें।</li><li>माउस छोड़ें ताकि खरीद पॉपअप खुले।</li><li>शीर्षक (अनिवार्य) भरें और विकल्प के रूप में टेक्स्ट, रंग, लिंक या छवि भरें।</li><li>खरीद के बाद, आपकी सेल्स चुनी गई सामग्री दिखाएंगी।</li><li>खोज बार का उपयोग करके खरीदी गई सेल्स को शीर्षक या निर्देशांक से खोजें।</li><li>माउस व्हील का उपयोग करके ज़ूम इन/आउट करें।</li></ul>"
+},
+pl: {
+title: "Jak korzystać z Pixel Kingdom",
+content: "<p>Witamy w Pixel Kingdom! Oto jak korzystać ze strony:</p><ul><li>Kliknij komórkę lub kliknij i przeciągnij, aby wybrać wiele komórek.</li><li>Puść mysz, aby otworzyć okno zakupu.</li><li>Wypełnij tytuł (wymagany) i opcjonalnie tekst, kolor, link lub obraz.</li><li>Po zakupie Twoje komórki wyświetlą wybraną zawartość.</li><li>Użyj paska wyszukiwania, aby znaleźć zakupione komórki po tytule lub współrzędnych.</li><li>Możesz powiększać/zmniejszać kółkiem myszy.</li></ul>"
+}
 };
 
-const langSelect = document.getElementById("langSelectInstr");
-const instrContent = document.getElementById("instrContent");
+const select = document.getElementById('languageSelect');
+const title = document.getElementById('title');
+const contentDiv = document.getElementById('content');
 
-langSelect.addEventListener("change", e=>{
-const lang = e.target.value;
-instrContent.textContent = instrTexts[lang] || instrTexts['en'];
+select.addEventListener('change', () => {
+const lang = select.value;
+if(texts[lang]) {
+title.textContent = texts[lang].title;
+contentDiv.innerHTML = texts[lang].content;
+}
 });
-
-// lingua default inglese
-instrContent.textContent = instrTexts['en'];
 </script>
 
 </body>

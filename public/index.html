@@ -8,60 +8,18 @@
 </head>
 <body>
 
-<header>
-<div class="top-bar">
-<div class="left">
-<span id="freeCount">0</span> free /
-<span id="usedCount">0</span> used
-<div id="colorBoxes">
-<span class="greenBox"></span>
-<span class="redBox"></span>
-</div>
-</div>
-<div class="right">
-<select id="langSelect">
-<option value="en">English</option>
-<option value="it">Italiano</option>
-<option value="fr">Français</option>
-<option value="es">Español</option>
-<option value="de">Deutsch</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-<option value="ja">日本語</option>
-<option value="zh">中文</option>
-<option value="ar">العربية</option>
-<option value="hi">हिंदी</option>
-<option value="pl">Polski</option>
-<option value="sv">Svenska</option>
-<option value="no">Norsk</option>
-<option value="da">Dansk</option>
-</select>
-<a href="terms.html" target="_blank">Terms & Conditions</a>
-<a href="instructions.html" target="_blank">How to Use</a>
-</div>
-</div>
-</header>
+<h1>Pixel Kingdom - 2 Million Cells, 1€ Each</h1>
 
-<div class="info">
-<h1>Pixel Kingdom</h1>
-<p>2 million cells, 1€ each</p>
+<div id="counters">
+<span id="freeCells">Free: 2000000</span>
+<span id="occupiedCells">Occupied: 0</span>
+<span id="colorIndicator"></span>
 </div>
 
-<canvas id="grid"></canvas>
+<canvas id="pixelCanvas"></canvas>
 
-<div id="popup">
-<h2 id="popupTitle"></h2>
-<input type="text" id="cellTitleInput" placeholder="Title (required)">
-<input type="text" id="cellTextInput" placeholder="Text">
-<input type="color" id="cellColorInput" value="#ff0000">
-<input type="url" id="cellLinkInput" placeholder="URL link">
-<input type="url" id="cellImageInput" placeholder="Image URL">
-<button id="buyBtn">Buy</button>
-<button id="cancelBtn">Cancel</button>
-</div>
-
-<div class="search-bar">
-<input type="text" id="searchInput" placeholder="Search by keyword or coordinates">
+<div id="searchContainer">
+<input type="text" id="searchInput" placeholder="Search by title or coordinates">
 <button id="searchBtn">Search</button>
 </div>
 

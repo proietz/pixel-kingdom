@@ -3,65 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms & Conditions - Pixel Kingdom</title>
-<link rel="stylesheet" href="style.css">
+<title>Terms & Conditions</title>
+<style>
+body { font-family: Arial; padding: 20px; background: #111; color: #fff; }
+select { margin-bottom: 20px; }
+</style>
 </head>
 <body>
 
-<header>
-<h1>Terms & Conditions</h1>
-<select id="langSelectTerms">
+<h1 id="title">Terms & Conditions</h1>
+
+<label for="languageSelect">Select Language:</label>
+<select id="languageSelect">
 <option value="en">English</option>
 <option value="it">Italiano</option>
-<option value="fr">Français</option>
 <option value="es">Español</option>
+<option value="fr">Français</option>
 <option value="de">Deutsch</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-<option value="ja">日本語</option>
 <option value="zh">中文</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="ru">Русский</option>
 <option value="ar">العربية</option>
-<option value="hi">हिंदी</option>
+<option value="hi">हिन्दी</option>
 <option value="pl">Polski</option>
-<option value="sv">Svenska</option>
-<option value="no">Norsk</option>
-<option value="da">Dansk</option>
 </select>
-</header>
 
-<main id="termsContent">
-<p>All users are responsible for the content they post. No illegal or copyrighted material without permission.</p>
-</main>
+<div id="content">
+<p>All users are responsible for the content they post. No illegal content is allowed.</p>
+<p>Purchases are final. Pixel Kingdom is not responsible for misuse.</p>
+</div>
 
 <script>
-const termsTexts = {
-en: "All users are responsible for the content they post. No illegal or copyrighted material without permission.",
-it: "Tutti gli utenti sono responsabili dei contenuti pubblicati. Nessun materiale illegale o protetto da copyright senza permesso.",
-fr: "Tous les utilisateurs sont responsables du contenu qu'ils publient. Aucun contenu illégal ou protégé par copyright sans autorisation.",
-es: "Todos los usuarios son responsables del contenido que publican. No se permite material ilegal o protegido por derechos de autor sin permiso.",
-de: "Alle Benutzer sind für die Inhalte verantwortlich, die sie posten. Kein illegales oder urheberrechtlich geschütztes Material ohne Erlaubnis.",
-ru: "Все пользователи несут ответственность за размещаемый ими контент. Никакого незаконного или защищенного авторским правом материала без разрешения.",
-ko: "모든 사용자는 게시하는 콘텐츠에 대해 책임이 있습니다. 허가 없는 불법 또는 저작권 보호 자료 금지.",
-ja: "すべてのユーザーは投稿するコンテンツに責任があります。許可のない違法または著作権保護された素材は禁止です。",
-zh: "所有用户对其发布的内容负责。未经许可不得发布非法或受版权保护的材料。",
-ar: "جميع المستخدمين مسؤولون عن المحتوى الذي ينشرونه. لا مواد غير قانونية أو محمية بحقوق الطبع والنشر بدون إذن.",
-hi: "सभी उपयोगकर्ता अपनी पोस्ट की गई सामग्री के लिए जिम्मेदार हैं। बिना अनुमति किसी अवैध या कॉपीराइट सामग्री की अनुमति नहीं।",
-pl: "Wszyscy użytkownicy są odpowiedzialni za treści, które publikują. Brak nielegalnych lub chronionych prawem autorskim materiałów bez pozwolenia.",
-sv: "Alla användare ansvarar för innehållet de publicerar. Inget olagligt eller upphovsrättsskyddat material utan tillstånd.",
-no: "Alle brukere er ansvarlige for innholdet de legger ut. Ingen ulovlig eller opphavsrettsbeskyttet materiale uten tillatelse.",
-da: "Alle brugere er ansvarlige for det indhold, de poster. Intet ulovligt eller ophavsretligt beskyttet materiale uden tilladelse."
+const texts = {
+en: {
+title: "Terms & Conditions",
+content: "<p>All users are responsible for the content they post. No illegal content is allowed.</p><p>Purchases are final. Pixel Kingdom is not responsible for misuse.</p>"
+},
+it: {
+title: "Termini e Condizioni",
+content: "<p>Tutti gli utenti sono responsabili del contenuto che pubblicano. Contenuti illegali non sono permessi.</p><p>Gli acquisti sono definitivi. Pixel Kingdom non è responsabile di un uso scorretto.</p>"
+},
+es: {
+title: "Términos y Condiciones",
+content: "<p>Todos los usuarios son responsables del contenido que publican. No se permite contenido ilegal.</p><p>Las compras son definitivas. Pixel Kingdom no se hace responsable de un uso indebido.</p>"
+},
+fr: {
+title: "Conditions Générales",
+content: "<p>Tous les utilisateurs sont responsables du contenu qu'ils publient. Aucun contenu illégal n'est autorisé.</p><p>Les achats sont définitifs. Pixel Kingdom n'est pas responsable d'un mauvais usage.</p>"
+},
+de: {
+title: "Geschäftsbedingungen",
+content: "<p>Alle Nutzer sind für die Inhalte verantwortlich, die sie posten. Keine illegalen Inhalte erlaubt.</p><p>Käufe sind endgültig. Pixel Kingdom ist nicht verantwortlich für Missbrauch.</p>"
+},
+zh: {
+title: "条款和条件",
+content: "<p>所有用户对其发布的内容负责。不允许非法内容。</p><p>购买为最终决定。Pixel Kingdom 对滥用不负责。</p>"
+},
+ja: {
+title: "利用規約",
+content: "<p>すべてのユーザーは投稿する内容に責任があります。違法なコンテンツは禁止されています。</p><p>購入は最終です。Pixel Kingdomは不正使用に責任を負いません。</p>"
+},
+ko: {
+title: "이용약관",
+content: "<p>모든 사용자는 자신이 게시한 콘텐츠에 대해 책임이 있습니다. 불법 콘텐츠는 허용되지 않습니다.</p><p>구매는 최종입니다. Pixel Kingdom은 오용에 대해 책임지지 않습니다.</p>"
+},
+ru: {
+title: "Условия использования",
+content: "<p>Все пользователи несут ответственность за публикуемый контент. Запрещен незаконный контент.</p><p>Покупки являются окончательными. Pixel Kingdom не несет ответственности за неправильное использование.</p>"
+},
+ar: {
+title: "الشروط والأحكام",
+content: "<p>جميع المستخدمين مسؤولون عن المحتوى الذي ينشرونه. المحتوى غير القانوني غير مسموح.</p><p>المشتريات نهائية. Pixel Kingdom غير مسؤول عن سوء الاستخدام.</p>"
+},
+hi: {
+title: "नियम और शर्तें",
+content: "<p>सभी उपयोगकर्ता जो सामग्री पोस्ट करते हैं, उसके लिए जिम्मेदार हैं। कोई अवैध सामग्री अनुमति नहीं है।</p><p>खरीद अंतिम हैं। Pixel Kingdom दुरुपयोग के लिए जिम्मेदार नहीं है।</p>"
+},
+pl: {
+title: "Regulamin",
+content: "<p>Wszyscy użytkownicy są odpowiedzialni za publikowane treści. Niedozwolona treść nielegalna.</p><p>Zakupy są ostateczne. Pixel Kingdom nie ponosi odpowiedzialności za niewłaściwe użycie.</p>"
+}
 };
 
-const langSelect = document.getElementById("langSelectTerms");
-const termsContent = document.getElementById("termsContent");
+const select = document.getElementById('languageSelect');
+const title = document.getElementById('title');
+const contentDiv = document.getElementById('content');
 
-langSelect.addEventListener("change", e=>{
-const lang = e.target.value;
-termsContent.textContent = termsTexts[lang];
+select.addEventListener('change', () => {
+const lang = select.value;
+if(texts[lang]) {
+title.textContent = texts[lang].title;
+contentDiv.innerHTML = texts[lang].content;
+}
 });
-
-// lingua default inglese
-termsContent.textContent = termsTexts['en'];
 </script>
 
 </body>

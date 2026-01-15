@@ -1,176 +1,113 @@
-const canvas = document.getElementById("grid");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('pixelCanvas');
+const ctx = canvas.getContext('2d');
+const freeCellsSpan = document.getElementById('freeCells');
+const occupiedCellsSpan = document.getElementById('occupiedCells');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
 
-const cellSize = 10;
-const rows = 1415;
-const cols = 1415;
+const canvasSize = 2000; // 2000x2000 pixel canvas
+canvas.width = canvasSize;
+canvas.height = canvasSize;
 
-canvas.width = cols * cellSize;
-canvas.height = rows * cellSize;
-
-// Celle inizialmente tutte null
-let cells = Array.from({length: rows}, () => Array(cols).fill(null));
-
+let cells = {}; // dati delle celle acquistate
 let selecting = false;
-let startX = 0, startY = 0;
+let startX, startY;
 let selectedCells = [];
 
-let currentLang = 'en'; // default inglese
+// disegna canvas nero
+ctx.fillStyle = "black";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-const languages = {
-en: {buyPopupTitle:"Buy selected cells"},
-it: {buyPopupTitle:"Acquista celle selezionate"},
-fr: {buyPopupTitle:"Acheter les cellules"},
-es: {buyPopupTitle:"Comprar celdas"},
-de: {buyPopupTitle:"Zellen kaufen"},
-ru: {buyPopupTitle:"Купить выбранные клетки"},
-ko: {buyPopupTitle:"선택한 셀 구매"},
-ja: {buyPopupTitle:"選択したセルを購入"},
-zh: {buyPopupTitle:"购买所选单元格"},
-ar: {buyPopupTitle:"شراء الخلايا المحددة"},
-hi: {buyPopupTitle:"चयनित कोशिकाएँ खरीदें"},
-pl: {buyPopupTitle:"Kup wybrane komórki"},
-sv: {buyPopupTitle:"Köp valda celler"},
-no: {buyPopupTitle:"Kjøp valgte celler"},
-da: {buyPopupTitle:"Køb valgte celler"}
-};
-
-// Zoom canvas
-let scale = 1;
-canvas.addEventListener("wheel", e=>{
-e.preventDefault();
-scale += e.deltaY * -0.001;
-scale = Math.min(Math.max(0.1, scale), 10);
-canvas.style.transform = `scale(${scale})`;
-});
-
-function drawGrid(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-for(let r=0;r<rows;r++){
-for(let c=0;c<cols;c++){
-const cell = cells[r][c];
-if(cell){
-ctx.fillStyle = cell.color || "#fff";
-ctx.fillRect(c*cellSize,r*cellSize,cellSize,cellSize);
-}
-ctx.strokeStyle = "#333";
-ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
-}
-}
-}
-drawGrid();
-
-function updateCounters(){
-let free=0, used=0;
-for(let r=0;r<rows;r++){
-for(let c=0;c<cols;c++){
-if(cells[r][c]) used++; else free++;
-}
-}
-document.getElementById("freeCount").textContent=free;
-document.getElementById("usedCount").textContent=used;
-document.getElementById("selectedCount").textContent=selectedCells.length;
-}
-
-// Selezione click/drag
-canvas.addEventListener("mousedown", e=>{
-selecting=true;
+// gestione click e drag
+canvas.addEventListener('mousedown', e => {
+selecting = true;
 const rect = canvas.getBoundingClientRect();
-startX = Math.floor((e.clientX-rect.left)/cellSize);
-startY = Math.floor((e.clientY-rect.top)/cellSize);
-selectedCells = [];
+startX = e.clientX - rect.left;
+startY = e.clientY - rect.top;
+selectedCells = [[startX, startY]];
 });
 
-canvas.addEventListener("mousemove", e=>{
-if(!selecting) return;
+canvas.addEventListener('mousemove', e => {
+if (!selecting) return;
 const rect = canvas.getBoundingClientRect();
-const x = Math.floor((e.clientX-rect.left)/cellSize);
-const y = Math.floor((e.clientY-rect.top)/cellSize);
+const x = e.clientX - rect.left;
+const y = e.clientY - rect.top;
+selectedCells.push([x, y]);
+drawSelection();
+});
+
+canvas.addEventListener('mouseup', e => {
+selecting = false;
+openPurchasePopup();
 selectedCells = [];
-const minX = Math.min(startX,x);
-const maxX = Math.max(startX,x);
-const minY = Math.min(startY,y);
-const maxY = Math.max(startY,y);
-for(let r=minY;r<=maxY;r++){
-for(let c=minX;c<=maxX;c++){
-selectedCells.push([r,c]);
-}
-}
-drawGrid();
-highlightSelected();
-updateCounters();
+drawCanvas();
 });
 
-canvas.addEventListener("mouseup", e=>{
-selecting=false;
-if(selectedCells.length>0){
-openPopup();
-}
-});
-
-function highlightSelected(){
+// funzione per evidenziare le celle selezionate
+function drawSelection() {
+drawCanvas();
 ctx.strokeStyle = "yellow";
-selectedCells.forEach(([r,c])=>{
-ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
-});
+ctx.lineWidth = 2;
+ctx.beginPath();
+const x0 = selectedCells[0][0];
+const y0 = selectedCells[0][1];
+const x1 = selectedCells[selectedCells.length-1][0];
+const y1 = selectedCells[selectedCells.length-1][1];
+ctx.rect(Math.min(x0,x1), Math.min(y0,y1), Math.abs(x1-x0), Math.abs(y1-y0));
+ctx.stroke();
 }
 
-// Popup acquisto
-const popup = document.getElementById("popup");
-const buyBtn = document.getElementById("buyBtn");
-const cancelBtn = document.getElementById("cancelBtn");
-
-function openPopup(){
-popup.style.display="block";
-document.getElementById("popupTitle").textContent = languages[currentLang].buyPopupTitle;
+// funzione per ridisegnare tutto il canvas con celle acquistate
+function drawCanvas() {
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width, canvas.height);
+for (const key in cells) {
+const cell = cells[key];
+ctx.fillStyle = cell.color || "white";
+ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
+}
 }
 
-cancelBtn.addEventListener("click", ()=>{ popup.style.display="none"; });
-
-buyBtn.addEventListener("click", ()=>{
-const title = document.getElementById("cellTitleInput").value.trim();
-const text = document.getElementById("cellTextInput").value;
-const color = document.getElementById("cellColorInput").value;
-const link = document.getElementById("cellLinkInput").value;
-const img = document.getElementById("cellImageInput").value;
-
-if(!title){ alert("Insert a title"); return; }
-
-selectedCells.forEach(([r,c])=>{
-cells[r][c] = {title,text,color,link,img};
+// popup acquisto simulato
+function openPurchasePopup() {
+if(selectedCells.length === 0) return;
+const title = prompt("Enter a title for your purchase:");
+if(!title) return;
+// salva le celle
+selectedCells.forEach(c => {
+const key = `${c[0]}-${c[1]}`;
+cells[key] = {x:c[0], y:c[1], width:1, height:1, color:'red', title:title};
 });
-
-alert(`Purchase completed!\nTitle: ${title}\nCells: ${selectedCells.length}`);
-popup.style.display="none";
-selectedCells = [];
-drawGrid();
 updateCounters();
-});
+drawCanvas();
+alert(`Your purchase "${title}" has been placed!`);
+}
 
-// Ricerca
-const searchBtn = document.getElementById("searchBtn");
-searchBtn.addEventListener("click", ()=>{
-const query = document.getElementById("searchInput").value.trim().toLowerCase();
-if(!query) return;
-drawGrid();
-let found = [];
-for(let r=0;r<rows;r++){
-for(let c=0;c<cols;c++){
-const cell = cells[r][c];
-if(cell && (cell.title.toLowerCase().includes(query) || `${r},${c}`===query)){
-found.push([r,c]);
+// aggiornamento contatori
+function updateCounters() {
+let occupied = Object.keys(cells).length;
+let free = 2000000 - occupied;
+freeCellsSpan.textContent = `Free: ${free}`;
+occupiedCellsSpan.textContent = `Occupied: ${occupied}`;
 }
-}
-}
-found.forEach(([r,c])=>{
+
+// ricerca
+searchBtn.addEventListener('click', () => {
+const term = searchInput.value.toLowerCase();
+for (const key in cells) {
+const cell = cells[key];
+if(cell.title.toLowerCase().includes(term)) {
+// lampeggio blu
 ctx.strokeStyle = "blue";
-ctx.lineWidth=2;
-ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
-});
+ctx.lineWidth = 2;
+ctx.strokeRect(cell.x, cell.y, cell.width, cell.height);
+}
+}
 });
 
-// Cambia lingua dal menu
-document.getElementById("langSelect").addEventListener("change", e=>{
-currentLang = e.target.value;
-document.getElementById("popupTitle").textContent = languages[currentLang].buyPopupTitle;
+// zoom dinamico
+canvas.addEventListener('wheel', e => {
+e.preventDefault();
+const scale = e.deltaY < 0 ? 1.1 : 0.9;
+canvas.style.transform = `scale(${scale})`;
 });
