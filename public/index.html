@@ -11,51 +11,43 @@
 <h1 id="titleText">Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
 <div>
 <label for="languageSelect">Lingua:</label>
-<select id="languageSelect">
-<option value="it">Italiano</option>
-<option value="en">English</option>
-<option value="es">Español</option>
-<option value="fr">Français</option>
-<option value="de">Deutsch</option>
-<option value="pt">Português</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-<option value="zh">中文</option>
-<option value="ar">العربية</option>
-<option value="hi">हिन्दी</option>
-<option value="pl">Polski</option>
-<option value="sv">Svenska</option>
-<option value="no">Norsk</option>
-<option value="fi">Suomi</option>
-<option value="da">Dansk</option>
-<option value="ja">日本語</option>
-</select>
+<select id="languageSelect"></select>
 </div>
-</header>
-
-<div id="searchBar" style="text-align:center; margin:10px 0;">
-<input type="text" id="searchInput" placeholder="Inserisci parola chiave o coordinate X,Y">
-<button id="searchBtn">Cerca</button>
+<div id="topLinks">
+<a href="terms.html" target="_blank" id="termsLink">Termini e Condizioni</a> |
+<a href="instructions.html" target="_blank" id="instructionsLink">Come usare il sito</a>
 </div>
-
-<canvas id="grid"></canvas>
-
-<div id="counters" style="text-align:center; margin-top:10px;">
+<div id="counters">
 <span id="freeLabel">Celle libere</span>: <span id="freeCount">0</span>
 <span id="usedLabel">Celle occupate</span>: <span id="usedCount">0</span>
 <span id="selectedLabel">Selezionate</span>: <span id="selectedCount">0</span>
 </div>
+<div id="searchBar">
+<input type="text" id="searchInput" placeholder="Parola chiave o coordinate X,Y">
+<button id="searchBtn">Cerca</button>
+</div>
+</header>
+
+<canvas id="grid"></canvas>
 
 <div id="popup" class="hidden">
 <h2 id="popupTitle">Acquista celle selezionate</h2>
-<label for="cellTitleInput">Titolo / Nome:</label>
+<label for="cellTitleInput">Titolo / Nome (obbligatorio):</label>
 <input type="text" id="cellTitleInput" placeholder="Es. Foto Cane">
+<label for="cellTextInput">Testo:</label>
+<input type="text" id="cellTextInput">
+<label for="cellColorInput">Pattern colore:</label>
+<input type="color" id="cellColorInput">
+<label for="cellLinkInput">Link / URL:</label>
+<input type="url" id="cellLinkInput">
+<label for="cellImageInput">Immagine (URL):</label>
+<input type="url" id="cellImageInput">
 <button id="buyBtn">Acquista</button>
 <button id="cancelBtn">Annulla</button>
 </div>
 
-<footer style="text-align:center; margin-top:20px;">
-<a href="terms.html" id="termsLink">Termini e Condizioni</a> | <span>&copy; <span id="year"></span> Pixel Kingdom. Tutti i diritti riservati.</span>
+<footer>
+<span>&copy; <span id="year"></span> Pixel Kingdom. Tutti i diritti riservati.</span>
 </footer>
 
 <script src="script.js"></script>
