@@ -1,22 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pixel Kingdom</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
 
-  <!-- HEADER FISSO -->
-  <header id="top-bar">
-    <h1>Pixel Kingdom</h1>
-    <div id="stats">
-      <span>🟩 Free: <strong id="freeCount">2000000</strong></span>
-      <span>🟥 Occupied: <strong id="usedCount">0</strong></span>
-    </div>
-    <nav>
-      <a href="terms.html" target="_blank">Terms & Conditions</a>
-      <a href="instructions.html" target="_blank">How to use</a>
-    </nav>
-  </header>
+<header id="top-bar">
+<h1>Pixel Kingdom</h1>
+<p>2 millions cells – 1€ for cell</p>
+</header>
 
-  <!-- AREA ZOOMABILE -->
-  <div id="canvas-wrapper">
-    <canvas id="pixelCanvas" width="2000" height="1000"></canvas>
-  </div>
+<div id="canvas-wrapper">
+<canvas id="pixelCanvas" width="2000" height="1000"></canvas>
+</div>
 
-  <script src="script.js"></script>
+<footer>
+<p>All rights reserved</p>
+</footer>
+
+<!-- Popup acquisto -->
+<div id="purchasePopup" class="hidden">
+<h3>Cell Options</h3>
+<label>Title: <input type="text" id="cellTitle"></label><br>
+<label>Color: <input type="color" id="cellColor"></label><br>
+<label>Text: <input type="text" id="cellText"></label><br>
+<label>Image URL: <input type="text" id="cellImage"></label><br>
+<label>Link URL: <input type="text" id="cellLink"></label><br>
+<button id="purchaseConfirm">Confirm</button>
+<button id="purchaseCancel">Cancel</button>
+</div>
+
+<script src="script.js"></script>
 </body>
+</html>
