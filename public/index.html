@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <title>Pixel Kingdom</title>
@@ -9,30 +9,27 @@
 <body>
 
 <header>
-<h1 id="titleText">Pixel Kingdom – 2.000.000 di celle • 1€ ciascuna</h1>
+<h1 id="titleText"></h1>
 
 <select id="languageSelect">
 <option value="it">Italiano</option>
 <option value="en">English</option>
-<option value="es">Español</option>
-<option value="fr">Français</option>
-<option value="de">Deutsch</option>
-<option value="ru">Русский</option>
-<option value="ko">한국어</option>
-<option value="zh">中文</option>
 </select>
 </header>
 
 <div id="infoBar">
-<span id="freeBox">🟩 Celle libere: <span id="freeCount"></span></span>
-<span id="usedBox">🟥 Celle occupate: <span id="usedCount"></span></span>
+🟩 <span id="freeLabel"></span>: <span id="freeCount"></span>
+|
+🟥 <span id="usedLabel"></span>: <span id="usedCount"></span>
+|
+🟦 <span id="selectedLabel">Selezionate</span>: <span id="selectedCount">0</span>
 </div>
 
 <canvas id="grid"></canvas>
 
 <!-- POPUP -->
 <div id="popup" class="hidden">
-<h3 id="popupTitle">Acquista celle selezionate</h3>
+<h3 id="popupTitle"></h3>
 
 <input id="title" placeholder="Nome / Titolo">
 <input id="color" type="color">
@@ -40,22 +37,19 @@
 <input id="image" placeholder="URL immagine (opzionale)">
 <textarea id="text" placeholder="Testo breve"></textarea>
 
-<div class="terms-box">
 <label>
 <input type="checkbox" id="acceptTerms">
-<span id="termsText">
-Accetto i <a href="terms.html" target="_blank">Termini e Condizioni</a>
-</span>
+<span id="acceptTermsText"></span>
+<a href="terms.html" target="_blank" id="termsLink"></a>
 </label>
-</div>
 
-<button id="buyBtn" disabled>Acquista</button>
-<button onclick="closePopup()">Annulla</button>
+<button id="buyBtn" disabled></button>
+<button id="cancelBtn"></button>
 </div>
 
 <footer>
-<a href="terms.html" target="_blank">Termini e Condizioni</a> |
-<span>© <span id="year"></span> Pixel Kingdom – Tutti i diritti riservati</span>
+<a href="terms.html" target="_blank" id="footerTerms"></a> |
+© <span id="year"></span> Pixel Kingdom – Tutti i diritti riservati
 </footer>
 
 <script src="script.js"></script>

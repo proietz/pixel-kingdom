@@ -1,16 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Termini e Condizioni</title>
+<title>Terms</title>
+<style>
+body {
+background: black;
+color: white;
+font-family: Arial;
+padding: 20px;
+}
+select {
+margin-bottom: 20px;
+}
+</style>
 </head>
-<body>
-<h1>Termini e Condizioni – Pixel Kingdom</h1>
 
-<p>Ogni contenuto inserito è responsabilità esclusiva dell’utente.</p>
-<p>Pixel Kingdom non è responsabile di link esterni.</p>
-<p>I contenuti illegali verranno rimossi senza rimborso.</p>
-<p>Non è garantita visibilità perpetua.</p>
+<body>
+
+<select id="lang"></select>
+
+<h1 id="title"></h1>
+<p id="content"></p>
+
+<script>
+const terms = {
+it: {
+title: "Termini e Condizioni",
+text: "I contenuti inseriti sono responsabilità esclusiva degli utenti. Pixel Kingdom non è responsabile di link esterni. I contenuti illegali verranno rimossi senza rimborso."
+},
+en: {
+title: "Terms and Conditions",
+text: "All content is the sole responsibility of users. Pixel Kingdom is not responsible for external links. Illegal content will be removed without refund."
+}
+};
+
+const select = document.getElementById("lang");
+Object.keys(terms).forEach(l => {
+const opt = document.createElement("option");
+opt.value = l;
+opt.text = l.toUpperCase();
+select.appendChild(opt);
+});
+
+function setLang(l) {
+document.getElementById("title").innerText = terms[l].title;
+document.getElementById("content").innerText = terms[l].text;
+}
+
+const saved = localStorage.getItem("lang") || "it";
+select.value = saved;
+setLang(saved);
+
+select.addEventListener("change", () => {
+localStorage.setItem("lang", select.value);
+setLang(select.value);
+});
+</script>
 
 </body>
 </html>
