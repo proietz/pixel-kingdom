@@ -16,22 +16,12 @@
 </header>
 
 <main>
-<ul id="instructionsContent">
-<li>Clicca su una cella per selezionarla singolarmente.</li>
-<li>Trascina il mouse per selezionare più celle contemporaneamente.</li>
-<li>Inserisci un titolo obbligatorio, testo, colore, link o immagine.</li>
-<li>Premi Acquista per confermare l’acquisto delle celle selezionate.</li>
-<li>Le coordinate delle celle acquistate saranno mostrate nel popup.</li>
-<li>Usa la barra di ricerca per trovare celle per titolo o coordinate.</li>
-<li>Usa lo zoom con la rotella del mouse per ingrandire o ridurre la griglia.</li>
-<li>Tutte le istruzioni e popup si adattano alla lingua selezionata o rilevata automaticamente.</li>
-</ul>
+<ul id="instructionsContent"></ul>
 </main>
 
 <script>
-// === Multilingua ===
 const languages = {
-it: { title:"Come usare Pixel Kingdom", content:[
+it:{title:"Come usare Pixel Kingdom", content:[
 "Clicca su una cella per selezionarla singolarmente.",
 "Trascina il mouse per selezionare più celle contemporaneamente.",
 "Inserisci un titolo obbligatorio, testo, colore, link o immagine.",
@@ -41,7 +31,7 @@ it: { title:"Come usare Pixel Kingdom", content:[
 "Usa lo zoom con la rotella del mouse per ingrandire o ridurre la griglia.",
 "Tutte le istruzioni e popup si adattano alla lingua selezionata o rilevata automaticamente."
 ]},
-en: { title:"How to use Pixel Kingdom", content:[
+en:{title:"How to use Pixel Kingdom", content:[
 "Click a cell to select it individually.",
 "Drag the mouse to select multiple cells at once.",
 "Enter a required title, text, color, link or image.",
@@ -51,19 +41,19 @@ en: { title:"How to use Pixel Kingdom", content:[
 "Use mouse wheel to zoom in/out the grid.",
 "All instructions and popups adapt to the selected or detected language."
 ]},
-fr: { title:"Comment utiliser Pixel Kingdom", content:["..."] }, // completare
-es: { title:"Cómo usar Pixel Kingdom", content:["..."] },
-de: { title:"Pixel Kingdom Anleitung", content:["..."] },
-ru: { title:"Как использовать Pixel Kingdom", content:["..."] },
-ko: { title:"Pixel Kingdom 사용법", content:["..."] },
-ja: { title:"Pixel Kingdomの使い方", content:["..."] },
-zh: { title:"Pixel Kingdom使用说明", content:["..."] },
-ar: { title:"كيفية استخدام Pixel Kingdom", content:["..."] },
-hi: { title:"Pixel Kingdom का उपयोग कैसे करें", content:["..."] },
-pl: { title:"Jak używać Pixel Kingdom", content:["..."] },
-sv: { title:"Hur man använder Pixel Kingdom", content:["..."] },
-no: { title:"Hvordan bruke Pixel Kingdom", content:["..."] },
-da: { title:"Sådan bruger du Pixel Kingdom", content:["..."] }
+fr:{title:"Comment utiliser Pixel Kingdom", content:["..."]},
+es:{title:"Cómo usar Pixel Kingdom", content:["..."]},
+de:{title:"Pixel Kingdom Anleitung", content:["..."]},
+ru:{title:"Как использовать Pixel Kingdom", content:["..."]},
+ko:{title:"Pixel Kingdom 사용법", content:["..."]},
+ja:{title:"Pixel Kingdomの使い方", content:["..."]},
+zh:{title:"Pixel Kingdom使用说明", content:["..."]},
+ar:{title:"كيفية استخدام Pixel Kingdom", content:["..."]},
+hi:{title:"Pixel Kingdom का उपयोग कैसे करें", content:["..."]},
+pl:{title:"Jak używać Pixel Kingdom", content:["..."]},
+sv:{title:"Hur man använder Pixel Kingdom", content:["..."]},
+no:{title:"Hvordan bruke Pixel Kingdom", content:["..."]},
+da:{title:"Sådan bruger du Pixel Kingdom", content:["..."]}
 };
 
 let currentLang = navigator.language.slice(0,2);
@@ -81,7 +71,6 @@ ul.appendChild(li);
 });
 }
 
-// Popola selezione lingue
 const langSelect = document.getElementById("languageSelect");
 for(const code in languages){
 const opt = document.createElement("option");
