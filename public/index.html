@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Pixel Kingdom</title>
-<link rel="stylesheet" href="style.css">
-</head>
 <body>
 
-<h1>Pixel Kingdom</h1>
-<p>2,000,000 cells – click or drag to select</p>
+  <!-- HEADER FISSO -->
+  <header id="top-bar">
+    <h1>Pixel Kingdom</h1>
+    <div id="stats">
+      <span>🟩 Free: <strong id="freeCount">2000000</strong></span>
+      <span>🟥 Occupied: <strong id="usedCount">0</strong></span>
+    </div>
+    <nav>
+      <a href="terms.html" target="_blank">Terms & Conditions</a>
+      <a href="instructions.html" target="_blank">How to use</a>
+    </nav>
+  </header>
 
-<canvas id="canvas"></canvas>
+  <!-- AREA ZOOMABILE -->
+  <div id="canvas-wrapper">
+    <canvas id="pixelCanvas" width="2000" height="1000"></canvas>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
-</html>

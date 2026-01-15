@@ -1,97 +1,52 @@
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("pixelCanvas");
 const ctx = canvas.getContext("2d");
+const wrapper = document.getElementById("canvas-wrapper");
 
-// dimensione canvas = 2 milioni di celle
-canvas.width = 2000;
-canvas.height = 1000;
-
-// stato
+let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
 let isDragging = false;
-let startX = 0;
-let startY = 0;
-let endX = 0;
-let endY = 0;
+let startX, startY;
 
-// celle acquistate (mock)
-const boughtCells = [];
-
-// disegna canvas nero
-function drawBase() {
+// riempi canvas nero
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// celle acquistate
-boughtCells.forEach(c => {
-ctx.fillStyle = c.color;
-ctx.fillRect(c.x, c.y, c.w, c.h);
-});
+function updateTransform() {
+  canvas.style.transform =
+    `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
 }
 
-// evidenzia selezione
-function drawSelection() {
-drawBase();
-ctx.strokeStyle = "yellow";
-ctx.lineWidth = 1;
-ctx.strokeRect(
-Math.min(startX, endX),
-Math.min(startY, endY),
-Math.abs(endX - startX),
-Math.abs(endY - startY)
-);
-}
+// ZOOM CON ROTELLA
+wrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
 
-// mouse events
-canvas.addEventListener("mousedown", e => {
-const rect = canvas.getBoundingClientRect();
-startX = Math.floor(e.clientX - rect.left);
-startY = Math.floor(e.clientY - rect.top);
-endX = startX;
-endY = startY;
-isDragging = true;
+  const zoomFactor = 0.1;
+  const direction = e.deltaY > 0 ? -1 : 1;
+
+  const newScale = scale + direction * zoomFactor;
+  if (newScale < 0.2 || newScale > 10) return;
+
+  scale = newScale;
+  updateTransform();
 });
 
-canvas.addEventListener("mousemove", e => {
-if (!isDragging) return;
-const rect = canvas.getBoundingClientRect();
-endX = Math.floor(e.clientX - rect.left);
-endY = Math.floor(e.clientY - rect.top);
-drawSelection();
+// PAN
+wrapper.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  startX = e.clientX - offsetX;
+  startY = e.clientY - offsetY;
+  wrapper.style.cursor = "grabbing";
 });
 
-canvas.addEventListener("mouseup", () => {
-isDragging = false;
-
-const x = Math.min(startX, endX);
-const y = Math.min(startY, endY);
-const w = Math.abs(endX - startX) + 1;
-const h = Math.abs(endY - startY) + 1;
-
-if (w === 1 && h === 1) {
-alert(`Selected cell: (${x}, ${y})`);
-} else {
-alert(`Selected block: ${w} x ${h}`);
-}
-
-// mock acquisto
-boughtCells.push({
-x,
-y,
-w,
-h,
-color: "red"
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  wrapper.style.cursor = "grab";
 });
 
-drawBase();
+window.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  offsetX = e.clientX - startX;
+  offsetY = e.clientY - startY;
+  updateTransform();
 });
-
-// zoom
-let scale = 1;
-canvas.addEventListener("wheel", e => {
-e.preventDefault();
-scale += e.deltaY * -0.001;
-scale = Math.min(Math.max(0.5, scale), 10);
-canvas.style.transform = `scale(${scale})`;
-});
-
-// init
-drawBase();
