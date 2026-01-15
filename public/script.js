@@ -1,113 +1,97 @@
-const canvas = document.getElementById('pixelCanvas');
-const ctx = canvas.getContext('2d');
-const freeCellsSpan = document.getElementById('freeCells');
-const occupiedCellsSpan = document.getElementById('occupiedCells');
-const searchInput = document.getElementById('searchInput');
-const searchBtn = document.getElementById('searchBtn');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-const canvasSize = 2000; // 2000x2000 pixel canvas
-canvas.width = canvasSize;
-canvas.height = canvasSize;
+// dimensione canvas = 2 milioni di celle
+canvas.width = 2000;
+canvas.height = 1000;
 
-let cells = {}; // dati delle celle acquistate
-let selecting = false;
-let startX, startY;
-let selectedCells = [];
+// stato
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let endX = 0;
+let endY = 0;
+
+// celle acquistate (mock)
+const boughtCells = [];
 
 // disegna canvas nero
+function drawBase() {
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// gestione click e drag
-canvas.addEventListener('mousedown', e => {
-selecting = true;
+// celle acquistate
+boughtCells.forEach(c => {
+ctx.fillStyle = c.color;
+ctx.fillRect(c.x, c.y, c.w, c.h);
+});
+}
+
+// evidenzia selezione
+function drawSelection() {
+drawBase();
+ctx.strokeStyle = "yellow";
+ctx.lineWidth = 1;
+ctx.strokeRect(
+Math.min(startX, endX),
+Math.min(startY, endY),
+Math.abs(endX - startX),
+Math.abs(endY - startY)
+);
+}
+
+// mouse events
+canvas.addEventListener("mousedown", e => {
 const rect = canvas.getBoundingClientRect();
-startX = e.clientX - rect.left;
-startY = e.clientY - rect.top;
-selectedCells = [[startX, startY]];
+startX = Math.floor(e.clientX - rect.left);
+startY = Math.floor(e.clientY - rect.top);
+endX = startX;
+endY = startY;
+isDragging = true;
 });
 
-canvas.addEventListener('mousemove', e => {
-if (!selecting) return;
+canvas.addEventListener("mousemove", e => {
+if (!isDragging) return;
 const rect = canvas.getBoundingClientRect();
-const x = e.clientX - rect.left;
-const y = e.clientY - rect.top;
-selectedCells.push([x, y]);
+endX = Math.floor(e.clientX - rect.left);
+endY = Math.floor(e.clientY - rect.top);
 drawSelection();
 });
 
-canvas.addEventListener('mouseup', e => {
-selecting = false;
-openPurchasePopup();
-selectedCells = [];
-drawCanvas();
+canvas.addEventListener("mouseup", () => {
+isDragging = false;
+
+const x = Math.min(startX, endX);
+const y = Math.min(startY, endY);
+const w = Math.abs(endX - startX) + 1;
+const h = Math.abs(endY - startY) + 1;
+
+if (w === 1 && h === 1) {
+alert(`Selected cell: (${x}, ${y})`);
+} else {
+alert(`Selected block: ${w} x ${h}`);
+}
+
+// mock acquisto
+boughtCells.push({
+x,
+y,
+w,
+h,
+color: "red"
 });
 
-// funzione per evidenziare le celle selezionate
-function drawSelection() {
-drawCanvas();
-ctx.strokeStyle = "yellow";
-ctx.lineWidth = 2;
-ctx.beginPath();
-const x0 = selectedCells[0][0];
-const y0 = selectedCells[0][1];
-const x1 = selectedCells[selectedCells.length-1][0];
-const y1 = selectedCells[selectedCells.length-1][1];
-ctx.rect(Math.min(x0,x1), Math.min(y0,y1), Math.abs(x1-x0), Math.abs(y1-y0));
-ctx.stroke();
-}
-
-// funzione per ridisegnare tutto il canvas con celle acquistate
-function drawCanvas() {
-ctx.fillStyle = "black";
-ctx.fillRect(0,0,canvas.width, canvas.height);
-for (const key in cells) {
-const cell = cells[key];
-ctx.fillStyle = cell.color || "white";
-ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
-}
-}
-
-// popup acquisto simulato
-function openPurchasePopup() {
-if(selectedCells.length === 0) return;
-const title = prompt("Enter a title for your purchase:");
-if(!title) return;
-// salva le celle
-selectedCells.forEach(c => {
-const key = `${c[0]}-${c[1]}`;
-cells[key] = {x:c[0], y:c[1], width:1, height:1, color:'red', title:title};
-});
-updateCounters();
-drawCanvas();
-alert(`Your purchase "${title}" has been placed!`);
-}
-
-// aggiornamento contatori
-function updateCounters() {
-let occupied = Object.keys(cells).length;
-let free = 2000000 - occupied;
-freeCellsSpan.textContent = `Free: ${free}`;
-occupiedCellsSpan.textContent = `Occupied: ${occupied}`;
-}
-
-// ricerca
-searchBtn.addEventListener('click', () => {
-const term = searchInput.value.toLowerCase();
-for (const key in cells) {
-const cell = cells[key];
-if(cell.title.toLowerCase().includes(term)) {
-// lampeggio blu
-ctx.strokeStyle = "blue";
-ctx.lineWidth = 2;
-ctx.strokeRect(cell.x, cell.y, cell.width, cell.height);
-}
-}
+drawBase();
 });
 
-// zoom dinamico
-canvas.addEventListener('wheel', e => {
+// zoom
+let scale = 1;
+canvas.addEventListener("wheel", e => {
 e.preventDefault();
-const scale = e.deltaY < 0 ? 1.1 : 0.9;
+scale += e.deltaY * -0.001;
+scale = Math.min(Math.max(0.5, scale), 10);
 canvas.style.transform = `scale(${scale})`;
 });
+
+// init
+drawBase();

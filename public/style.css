@@ -1,53 +1,22 @@
 body {
 margin: 0;
-font-family: Arial, sans-serif;
-background-color: #111;
+background: #111;
 color: #fff;
+font-family: Arial, sans-serif;
 text-align: center;
 }
 
 h1 {
-margin: 20px 0;
+margin: 10px 0 0 0;
 }
 
-#counters {
-margin: 10px 0;
+p {
+margin: 5px 0 10px 0;
 }
 
-#freeCells, #occupiedCells {
-margin: 0 10px;
-font-weight: bold;
-}
-
-#colorIndicator {
-display: inline-block;
-width: 20px;
-height: 20px;
-vertical-align: middle;
-border-radius: 4px;
-margin-left: 10px;
-background-color: green; /* verde iniziale per celle libere */
-}
-
-#pixelCanvas {
+canvas {
 display: block;
 margin: 0 auto;
-background-color: black; /* canvas completamente nero */
+background: black;
 cursor: crosshair;
-}
-
-#searchContainer {
-margin: 20px 0;
-}
-
-#searchInput {
-width: 300px;
-padding: 5px;
-font-size: 14px;
-}
-
-#searchBtn {
-padding: 5px 10px;
-font-size: 14px;
-cursor: pointer;
 }
