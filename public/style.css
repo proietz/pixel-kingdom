@@ -1,136 +1,16 @@
-/* RESET BASE */
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-}
-
-/* BODY */
-body {
-background-color: #000;
-color: #fff;
-font-family: Arial, Helvetica, sans-serif;
-text-align: center;
-}
-
-/* HEADER */
-header {
-padding: 15px;
-}
-
-header h1 {
-font-size: 22px;
-margin-bottom: 10px;
-}
-
-#languageSelect {
-padding: 5px;
-font-size: 14px;
-}
-
-/* INFO BAR */
-#infoBar {
-margin: 10px auto;
-font-size: 14px;
-display: flex;
-justify-content: center;
-gap: 20px;
-}
-
-#freeBox {
-color: #00ff7f;
-}
-
-#usedBox {
-color: #ff4c4c;
-}
-
-/* CANVAS GRID */
-canvas {
-display: block;
-margin: 20px auto;
-border: 2px solid #333;
-cursor: crosshair;
-}
-
-/* POPUP ACQUISTO */
-#popup {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background-color: #111;
-border: 1px solid #555;
-padding: 20px;
-width: 300px;
-z-index: 999;
-}
-
-#popup h3 {
-margin-bottom: 10px;
-}
-
-#popup input,
-#popup textarea {
-width: 100%;
-margin: 6px 0;
-padding: 6px;
-background: #000;
-border: 1px solid #444;
-color: #fff;
-font-size: 13px;
-}
-
-#popup textarea {
-resize: none;
-height: 60px;
-}
-
-/* TERMINI */
-.terms-box {
-margin: 10px 0;
-font-size: 12px;
-text-align: left;
-}
-
-.terms-box a {
-color: #4caf50;
-text-decoration: underline;
-}
-
-/* BUTTONS */
-button {
-width: 100%;
-padding: 8px;
-margin-top: 8px;
-background-color: #222;
-color: #fff;
-border: 1px solid #555;
-cursor: pointer;
-}
-
-button:hover:not(:disabled) {
-background-color: #333;
-}
-
-button:disabled {
-opacity: 0.5;
-cursor: not-allowed;
-}
-
-/* FOOTER */
-footer {
-margin: 20px 0;
-font-size: 12px;
-color: #aaa;
-}
-
-footer a {
-color: #aaa;
-text-decoration: underline;
-}
-
-/* UTILITY */
-.hidden {
-display: none;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#000;color:#fff;}
+header{padding:10px;background:#111;}
+#titleText{font-size:20px;margin-bottom:5px;}
+#languageSelect{margin-left:10px;}
+#topLinks a{color:#0af;text-decoration:none;margin-right:10px;}
+#counters{margin:10px 0;}
+#counters span{margin-right:15px;}
+#searchBar{margin:10px 0;}
+#searchBar input{padding:5px;width:200px;}
+#searchBar button{padding:5px 10px;}
+canvas{border:1px solid #555;display:block;margin:0 auto;}
+#popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:15px;border:2px solid #0af;z-index:10;}
+.hidden{display:none;}
+#popup input{display:block;width:100%;margin-bottom:10px;padding:5px;}
+#popup button{margin-top:5px;padding:5px 10px;}
+footer{padding:10px;text-align:center;background:#111;margin-top:10px;}

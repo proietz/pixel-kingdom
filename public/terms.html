@@ -2,61 +2,84 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Terms</title>
-<style>
-body {
-background: black;
-color: white;
-font-family: Arial;
-padding: 20px;
-}
-select {
-margin-bottom: 20px;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termini e Condizioni</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<header>
+<h1 id="titleText">Termini e Condizioni</h1>
+<div>
+<label for="languageSelect">Lingua:</label>
+<select id="languageSelect"></select>
+</div>
+</header>
 
-<select id="lang"></select>
-
-<h1 id="title"></h1>
-<p id="content"></p>
+<main>
+<p id="termsContent">
+Qui saranno scritti i termini e condizioni del Pixel Kingdom.<br>
+- Gli utenti sono responsabili dei contenuti inseriti.<br>
+- Nessuna carta di pagamento è salvata sul server.<br>
+- È vietato pubblicare contenuti illegali, offensivi o protetti da copyright.<br>
+- Pixel Kingdom si riserva il diritto di rimuovere contenuti inappropriati.<br>
+- L’acquisto di celle è vincolante e non rimborsabile.<br>
+- Le coordinate delle celle acquistate sono di proprietà dell’acquirente ma gestite dal sito per visualizzazione.
+</p>
+</main>
 
 <script>
-const terms = {
-it: {
-title: "Termini e Condizioni",
-text: "I contenuti inseriti sono responsabilità esclusiva degli utenti. Pixel Kingdom non è responsabile di link esterni. I contenuti illegali verranno rimossi senza rimborso."
-},
-en: {
-title: "Terms and Conditions",
-text: "All content is the sole responsibility of users. Pixel Kingdom is not responsible for external links. Illegal content will be removed without refund."
-}
+// === Multilingua ===
+const languages = {
+it: { title:"Termini e Condizioni", content: `Qui saranno scritti i termini e condizioni del Pixel Kingdom.<br>
+- Gli utenti sono responsabili dei contenuti inseriti.<br>
+- Nessuna carta di pagamento è salvata sul server.<br>
+- È vietato pubblicare contenuti illegali, offensivi o protetti da copyright.<br>
+- Pixel Kingdom si riserva il diritto di rimuovere contenuti inappropriati.<br>
+- L’acquisto di celle è vincolante e non rimborsabile.<br>
+- Le coordinate delle celle acquistate sono di proprietà dell’acquirente ma gestite dal sito per visualizzazione.` },
+en: { title:"Terms & Conditions", content: `Here are the Pixel Kingdom terms and conditions.<br>
+- Users are responsible for the content they submit.<br>
+- No payment card data is stored on the server.<br>
+- Posting illegal, offensive or copyrighted content is prohibited.<br>
+- Pixel Kingdom reserves the right to remove inappropriate content.<br>
+- Cell purchases are binding and non-refundable.<br>
+- Coordinates of purchased cells are owned by the buyer but managed by the site for display.` },
+fr: { title:"Conditions", content:"..." }, // puoi completare con tutte le lingue
+es: { title:"Términos y Condiciones", content:"..." },
+de: { title:"AGB", content:"..." },
+ru: { title:"Условия", content:"..." },
+ko: { title:"약관", content:"..." },
+ja: { title:"利用規約", content:"..." },
+zh: { title:"条款", content:"..." },
+ar: { title:"الشروط", content:"..." },
+hi: { title:"नियम और शर्तें", content:"..." },
+pl: { title:"Warunki", content:"..." },
+sv: { title:"Villkor", content:"..." },
+no: { title:"Vilkår", content:"..." },
+da: { title:"Vilkår", content:"..." }
 };
 
-const select = document.getElementById("lang");
-Object.keys(terms).forEach(l => {
-const opt = document.createElement("option");
-opt.value = l;
-opt.text = l.toUpperCase();
-select.appendChild(opt);
-});
+let currentLang = navigator.language.slice(0,2);
+if(!languages[currentLang]) currentLang="en";
 
-function setLang(l) {
-document.getElementById("title").innerText = terms[l].title;
-document.getElementById("content").innerText = terms[l].text;
+function updateLanguage(){
+const lang = languages[currentLang];
+document.getElementById("titleText").textContent = lang.title;
+document.getElementById("termsContent").innerHTML = lang.content;
 }
 
-const saved = localStorage.getItem("lang") || "it";
-select.value = saved;
-setLang(saved);
+// Popola selezione lingue
+const langSelect = document.getElementById("languageSelect");
+for(const code in languages){
+const opt = document.createElement("option");
+opt.value = code;
+opt.textContent = code.toUpperCase();
+if(code===currentLang) opt.selected=true;
+langSelect.appendChild(opt);
+}
+langSelect.addEventListener("change",(e)=>{ currentLang=e.target.value; updateLanguage(); });
 
-select.addEventListener("change", () => {
-localStorage.setItem("lang", select.value);
-setLang(select.value);
-});
+updateLanguage();
 </script>
-
 </body>
 </html>
