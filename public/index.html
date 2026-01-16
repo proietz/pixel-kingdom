@@ -8,11 +8,16 @@
 <body>
 <!-- TOP BAR -->
 <div id="topBar">
-<div id="cellCounter">Free: 0 | Occupied: 0</div>
+<div id="searchSection">
+<input type="text" id="coordinateSearch" placeholder="Search by X,Y">
+<button id="searchBtn">Go</button>
+</div>
+
 <div id="titleSection">
 <h1>Pixel Kingdom</h1>
 <p>2 millions cells 1€ for cell — The story of Internet strikes again</p>
 </div>
+
 <div id="linksSection">
 <a href="terms.html" target="_blank">Terms & Conditions</a>
 <a href="instructions.html" target="_blank">Instructions</a>
@@ -22,12 +27,15 @@
 <!-- CANVAS -->
 <div id="canvasWrapper">
 <canvas id="pixelCanvas"></canvas>
-<div id="selectionInfo">Selected: 0 x 0 = 0 cells</div>
+<div id="selectionInfo" class="hidden">Selected: 0 x 0 = 0 cells</div>
+<div id="mouseCounter" class="hidden">Free: 2000000 | Occupied: 0</div>
 </div>
 
 <!-- POPUP ACQUISTO -->
 <div id="popup" class="hidden">
+<button id="popupClose" style="float:right;">Back</button>
 <h2 id="popupTitle">Purchase</h2>
+<div id="popupCoords" style="float:right;">Coords: 0,0</div>
 <label>Title (required): <input type="text" id="itemTitle" placeholder="Enter title"></label><br>
 <label>Text: <input type="text" id="itemText" placeholder="Optional text"></label><br>
 <label>Color pattern: <input type="color" id="itemColor"></label><br>
