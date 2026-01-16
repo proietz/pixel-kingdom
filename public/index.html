@@ -6,52 +6,36 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header id="top-bar">
-<div id="left-bar">
-<div id="cellCounter">
-<span id="freeCells">Free: 2000000</span> |
-<span id="occupiedCells">Occupied: 0</span>
-</div>
-<div id="searchBox">
-<input type="text" id="searchInput" placeholder="Search by name/coordinate">
-<button id="searchBtn">Search</button>
-</div>
-</div>
-
-<div id="center-bar">
+<!-- TOP BAR -->
+<div id="topBar">
+<div id="cellCounter">Free: 0 | Occupied: 0</div>
+<div id="titleSection">
 <h1>Pixel Kingdom</h1>
-<p>2 millions cells – 1€ for cell | the story of internet strikes again</p>
+<p>2 millions cells 1€ for cell — The story of Internet strikes again</p>
 </div>
-
-<div id="right-bar">
-<a href="terms.html" target="_blank">Terms & Conditions</a> |
+<div id="linksSection">
+<a href="terms.html" target="_blank">Terms & Conditions</a>
 <a href="instructions.html" target="_blank">Instructions</a>
 </div>
-</header>
-
-<div id="canvas-wrapper">
-<canvas id="pixelCanvas" width="2000" height="1000"></canvas>
 </div>
 
-<footer>
-<p>All rights reserved</p>
-</footer>
+<!-- CANVAS -->
+<div id="canvasWrapper">
+<canvas id="pixelCanvas"></canvas>
+<div id="selectionInfo">Selected: 0 x 0 = 0 cells</div>
+</div>
 
-<!-- Popup acquisto -->
-<div id="purchasePopup" class="hidden">
-<h3>Cell Options</h3>
-<p id="selectionInfo"></p>
-<label>Title (required): <input type="text" id="cellTitle"></label><br>
-<label>Color: <input type="color" id="cellColor"></label><br>
-<label>Text: <input type="text" id="cellText"></label><br>
-<label>Image URL: <input type="text" id="cellImage"></label><br>
-<label>Link URL: <input type="text" id="cellLink"></label><br>
-<label>
-<input type="checkbox" id="acceptTerms"> I accept the <a href="terms.html" target="_blank">Terms & Conditions</a>
-</label><br>
+<!-- POPUP ACQUISTO -->
+<div id="popup" class="hidden">
+<h2 id="popupTitle">Purchase</h2>
+<label>Title (required): <input type="text" id="itemTitle" placeholder="Enter title"></label><br>
+<label>Text: <input type="text" id="itemText" placeholder="Optional text"></label><br>
+<label>Color pattern: <input type="color" id="itemColor"></label><br>
+<label>Image: <input type="file" id="itemImage"></label><br>
+<label>Link/URL: <input type="url" id="itemLink" placeholder="https://"></label><br>
+<div id="selectedCellsInfo">Selected cells: 0 — Total cost: 0€</div>
+<label><input type="checkbox" id="acceptTerms"> I accept Terms & Conditions</label><br>
 <button id="purchaseConfirm">Purchase</button>
-<button id="purchaseCancel">Cancel</button>
 </div>
 
 <script src="script.js"></script>
