@@ -1,95 +1,147 @@
-const canvas = document.getElementById("pixelCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('pixelCanvas');
+const ctx = canvas.getContext('2d');
 
-const popup = document.getElementById("popup");
-const popupClose = document.getElementById("popupClose");
-const purchaseConfirm = document.getElementById("purchaseConfirm");
-const selectionInfo = document.getElementById("selectionInfo");
-const mouseCounter = document.getElementById("mouseCounter");
-const popupCoords = document.getElementById("popupCoords");
-const selectedCellsInfo = document.getElementById("selectedCellsInfo");
-const acceptTerms = document.getElementById("acceptTerms");
+const popup = document.getElementById('popup');
+const closePopup = document.getElementById('closePopup');
+const purchaseConfirm = document.getElementById('purchaseConfirm');
+const selectionInfo = document.getElementById('selectionInfo');
+const popupCoordinates = document.getElementById('popupCoordinates');
+const cellCounter = document.getElementById('cellCounter');
 
-const cellSize = 2;
-const cols = 2000;
-const rows = 1000;
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 
-// Array celle
-const grid = Array.from({ length: cols }, () => Array(rows).fill(false));
+let isMouseDown = false;
+let startX = 0;
+let startY = 0;
+let endX = 0;
+let endY = 0;
+let scale = 1;
 
-// Selezione
-let selecting = false;
-let startX = 0, startY = 0;
-let selectionRect = { x:0,y:0,w:0,h:0 };
+// Griglia dati: false = libera, true = occupata
+const grid = Array(canvasHeight).fill().map(() => Array(canvasWidth).fill(false));
 
-// Inizializza canvas nero
-ctx.fillStyle = "black";
-ctx.fillRect(0,0,canvas.width, canvas.height);
-
-// --- EVENTI MOUSE ---
-canvas.addEventListener("mousedown", e => {
+// Eventi mouse
+canvas.addEventListener('mousedown', e => {
 const rect = canvas.getBoundingClientRect();
-startX = Math.floor((e.clientX - rect.left)/cellSize);
-startY = Math.floor((e.clientY - rect.top)/cellSize);
-selecting = true;
-
-mouseCounter.classList.remove("hidden");
+startX = Math.floor((e.clientX - rect.left) / scale);
+startY = Math.floor((e.clientY - rect.top) / scale);
+isMouseDown = true;
+updateSelectionInfo(startX, startY, startX, startY, e.clientX, e.clientY);
+selectionInfo.classList.remove('hidden');
 });
 
-canvas.addEventListener("mousemove", e => {
-if (!selecting) return;
-
+canvas.addEventListener('mousemove', e => {
+if (!isMouseDown) return;
 const rect = canvas.getBoundingClientRect();
-const currentX = Math.floor((e.clientX - rect.left)/cellSize);
-const currentY = Math.floor((e.clientY - rect.top)/cellSize);
+endX = Math.floor((e.clientX - rect.left) / scale);
+endY = Math.floor((e.clientY - rect.top) / scale);
+updateSelectionInfo(startX, startY, endX, endY, e.clientX, e.clientY);
+drawCanvas();
+});
 
-const selX = Math.min(startX, currentX);
-const selY = Math.min(startY, currentY);
-const selW = Math.abs(currentX - startX) + 1;
-const selH = Math.abs(currentY - startY) + 1;
+canvas.addEventListener('mouseup', e => {
+if (!isMouseDown) return;
+isMouseDown = false;
+selectionInfo.classList.add('hidden');
+endX = Math.floor(endX);
+endY = Math.floor(endY);
+showPopup(startX, startY, endX, endY);
+});
 
-selectionRect = { x: selX, y: selY, w: selW, h: selH };
+// Zoom con rotella
+canvas.addEventListener('wheel', e => {
+e.preventDefault();
+const delta = e.deltaY < 0 ? 0.1 : -0.1;
+scale = Math.min(Math.max(0.1, scale + delta), 5);
+drawCanvas();
+});
 
-selectionInfo.textContent = `Selected: ${selW} x ${selH} = ${selW*selH} cells`;
+// Disegna canvas
+function drawCanvas() {
+ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+ctx.save();
+ctx.scale(scale, scale);
 
-// evidenzia selezione
-ctx.fillStyle = "black";
-ctx.fillRect(0,0,canvas.width, canvas.height);
-ctx.strokeStyle = "yellow";
-ctx.lineWidth = 2;
-ctx.strokeRect(selX*cellSize, selY*cellSize, selW*cellSize, selH*cellSize);
-
-// aggiorna contatore celle
-let free=0, occupied=0;
-for(let x=0;x<cols;x++){
-for(let y=0;y<rows;y++){
-grid[x][y]?occupied++:free++;
+for (let y = 0; y < canvasHeight; y++) {
+for (let x = 0; x < canvasWidth; x++) {
+if (grid[y][x]) {
+ctx.fillStyle = '#fff';
+ctx.fillRect(x, y, 1, 1);
 }
 }
-mouseCounter.textContent = `Free: ${free} | Occupied: ${occupied}`;
-});
+}
 
-canvas.addEventListener("mouseup", e => {
-selecting = false;
-popup.classList.remove("hidden");
-popupCoords.textContent = `Coords: ${selectionRect.x},${selectionRect.y}`;
-selectedCellsInfo.textContent = `Selected cells: ${selectionRect.w * selectionRect.h} — Total cost: ${selectionRect.w * selectionRect.h} €`;
-});
+// Evidenzia selezione
+if (isMouseDown) {
+const x0 = Math.min(startX, endX);
+const y0 = Math.min(startY, endY);
+const w = Math.abs(endX - startX) + 1;
+const h = Math.abs(endY - startY) + 1;
+ctx.fillStyle = 'rgba(0,255,255,0.3)';
+ctx.fillRect(x0, y0, w, h);
+}
 
-// --- BUTTONS ---
-popupClose.addEventListener("click", ()=>popup.classList.add("hidden"));
+ctx.restore();
+}
 
-purchaseConfirm.addEventListener("click", ()=>{
-if(!acceptTerms.checked){
-alert("You must accept the terms and conditions!");
+// Popup
+function showPopup(x0, y0, x1, y1) {
+const startXSel = Math.min(x0, x1);
+const startYSel = Math.min(y0, y1);
+const width = Math.abs(x1 - x0) + 1;
+const height = Math.abs(y1 - y0) + 1;
+popupCoordinates.textContent = `Top-left: (${startXSel},${startYSel})`;
+popup.querySelector('#popupTitle').value = '';
+popup.querySelector('#popupText').value = '';
+popup.querySelector('#popupLink').value = '';
+popup.querySelector('#popupColor').value = '#ffffff';
+popup.querySelector('#popupImage').value = '';
+popup.querySelector('#acceptTermsPopup').checked = false;
+
+popup.classList.remove('hidden');
+
+// Salva selezione temporanea
+popup.dataset.startX = startXSel;
+popup.dataset.startY = startYSel;
+popup.dataset.width = width;
+popup.dataset.height = height;
+}
+
+// Chiudi popup
+closePopup.addEventListener('click', () => popup.classList.add('hidden'));
+
+// Conferma acquisto
+purchaseConfirm.addEventListener('click', () => {
+if (!document.getElementById('acceptTermsPopup').checked) {
+alert('Please accept terms & conditions!');
 return;
 }
-for(let x=selectionRect.x;x<selectionRect.x+selectionRect.w;x++){
-for(let y=selectionRect.y;y<selectionRect.y+selectionRect.h;y++){
-grid[x][y]=true;
-ctx.fillStyle="#0af";
-ctx.fillRect(x*cellSize,y*cellSize,cellSize,cellSize);
+const startXSel = parseInt(popup.dataset.startX);
+const startYSel = parseInt(popup.dataset.startY);
+const width = parseInt(popup.dataset.width);
+const height = parseInt(popup.dataset.height);
+
+for (let y = startYSel; y < startYSel + height; y++) {
+for (let x = startXSel; x < startXSel + width; x++) {
+grid[y][x] = true;
 }
 }
-popup.classList.add("hidden");
+
+// Aggiorna contatore globale
+const occupied = grid.flat().filter(c => c).length;
+const free = canvasWidth * canvasHeight - occupied;
+cellCounter.textContent = `Free: ${free.toLocaleString()} | Occupied: ${occupied.toLocaleString()}`;
+
+drawCanvas();
+popup.classList.add('hidden');
 });
+
+// Info selezione vicino mouse
+function updateSelectionInfo(x0, y0, x1, y1, mouseX, mouseY) {
+const width = Math.abs(x1 - x0) + 1;
+const height = Math.abs(y1 - y0) + 1;
+selectionInfo.textContent = `${width} x ${height} = ${width*height} cells`;
+selectionInfo.style.left = `${mouseX + 15}px`;
+selectionInfo.style.top = `${mouseY + 15}px`;
+}

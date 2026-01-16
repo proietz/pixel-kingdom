@@ -1,93 +1,101 @@
 body {
 margin: 0;
 font-family: Arial, sans-serif;
-background: #000;
-color: #fff;
+background: black;
+color: white;
 }
 
 #topBar {
 display: flex;
 justify-content: space-between;
 align-items: center;
-padding: 10px 20px;
-background: #111;
+padding: 10px;
 }
 
-#searchSection input {
-width: 80px;
-padding: 3px;
-font-size: 12px;
+#leftBar {
+display: flex;
+align-items: center;
+gap: 10px;
 }
 
-#searchSection button {
-padding: 3px 6px;
-font-size: 12px;
+#searchCoordinates {
+width: 120px;
+padding: 4px;
 }
 
-#titleSection h1 {
+#cellCounter {
+font-weight: bold;
+}
+
+#title {
 margin: 0;
-font-size: 28px;
 }
 
-#titleSection p {
-margin: 0;
-font-size: 16px;
-color: #ccc;
-}
-
-#linksSection a {
+#rightBar a {
+color: white;
 margin-left: 10px;
-color: #0af;
 text-decoration: none;
-font-size: 14px;
 }
 
 #canvasWrapper {
 position: relative;
+width: 2000px;
+height: 1000px;
+margin: 0 auto;
+border: 1px solid #444;
+overflow: hidden;
 }
 
 #pixelCanvas {
 display: block;
-margin: 20px auto;
-border: 2px solid #333;
-width: 2000px;
-height: 1000px;
-cursor: grab;
+background: black;
 }
 
-#selectionInfo, #mouseCounter {
-position: absolute;
-background: rgba(0,0,0,0.7);
-padding: 5px 10px;
-border-radius: 4px;
-font-size: 14px;
-z-index: 50;
+#slogan {
+text-align: center;
+margin: 10px 0;
 }
 
-#selectionInfo {
-top: 10px;
-left: 10px;
-}
-
-#mouseCounter {
-top: 30px;
-left: 10px;
+#footer {
+text-align: center;
+margin-top: 10px;
+font-size: 12px;
 }
 
 #popup {
 position: fixed;
-top: 50%;
+top: 20%;
 left: 50%;
-transform: translate(-50%, -50%);
+transform: translateX(-50%);
 background: #222;
-color: #fff;
-padding: 20px;
-border-radius: 6px;
-border: 2px solid #0af;
+border: 2px solid #fff;
+padding: 15px;
 z-index: 100;
+width: 400px;
 }
 
-.hidden { display: none; }
+#popup.hidden {
+display: none;
+}
 
-#popup input, #popup button { margin: 5px 0; padding: 5px; }
-#selectedCellsInfo { margin: 10px 0; font-weight: bold; }
+#popupHeader {
+display: flex;
+justify-content: space-between;
+margin-bottom: 10px;
+}
+
+#popupContent label {
+display: block;
+margin: 5px 0;
+}
+
+#selectionInfo {
+position: fixed;
+pointer-events: none;
+background: rgba(255, 255, 255, 0.1);
+color: #fff;
+padding: 3px 5px;
+border-radius: 3px;
+font-size: 12px;
+z-index: 50;
+}
