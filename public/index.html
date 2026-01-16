@@ -8,8 +8,26 @@
 <body>
 
 <header id="top-bar">
+<div id="left-bar">
+<div id="cellCounter">
+<span id="freeCells">Free: 2000000</span> |
+<span id="occupiedCells">Occupied: 0</span>
+</div>
+<div id="searchBox">
+<input type="text" id="searchInput" placeholder="Search by name/coordinate">
+<button id="searchBtn">Search</button>
+</div>
+</div>
+
+<div id="center-bar">
 <h1>Pixel Kingdom</h1>
-<p>2 millions cells – 1€ for cell</p>
+<p>2 millions cells – 1€ for cell | the story of internet strikes again</p>
+</div>
+
+<div id="right-bar">
+<a href="terms.html" target="_blank">Terms & Conditions</a> |
+<a href="instructions.html" target="_blank">Instructions</a>
+</div>
 </header>
 
 <div id="canvas-wrapper">
@@ -23,12 +41,16 @@
 <!-- Popup acquisto -->
 <div id="purchasePopup" class="hidden">
 <h3>Cell Options</h3>
-<label>Title: <input type="text" id="cellTitle"></label><br>
+<p id="selectionInfo"></p>
+<label>Title (required): <input type="text" id="cellTitle"></label><br>
 <label>Color: <input type="color" id="cellColor"></label><br>
 <label>Text: <input type="text" id="cellText"></label><br>
 <label>Image URL: <input type="text" id="cellImage"></label><br>
 <label>Link URL: <input type="text" id="cellLink"></label><br>
-<button id="purchaseConfirm">Confirm</button>
+<label>
+<input type="checkbox" id="acceptTerms"> I accept the <a href="terms.html" target="_blank">Terms & Conditions</a>
+</label><br>
+<button id="purchaseConfirm">Purchase</button>
 <button id="purchaseCancel">Cancel</button>
 </div>
 
