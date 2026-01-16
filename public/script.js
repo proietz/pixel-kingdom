@@ -1,5 +1,3 @@
-// script.js - Pixel Kingdom (canvas 2000x1000, selezione multipla, popup, evidenziazione)
-
 // Canvas e contesto
 const canvas = document.getElementById("pixelCanvas");
 const ctx = canvas.getContext("2d");
