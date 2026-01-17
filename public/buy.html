@@ -1,185 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Purchase Block - Pixel Kingdom</title>
+<title>Buy Block - Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
-<style>
-body {
-font-family: Arial, Helvetica, sans-serif;
-text-align: center;
-padding: 20px;
-}
-
-#grid {
-width: 500px;
-height: 500px;
-margin: 20px auto;
-display: grid;
-grid-template-columns: repeat(10, 40px); /* 10x10 min block */
-grid-template-rows: repeat(10, 40px);
-border: 1px solid #000;
-user-select: none;
-}
-
-.cell {
-border: 1px solid #ccc;
-cursor: pointer;
-background-color: #f9f9f9;
-}
-
-.cell.selected {
-background-color: #add8e6; /* evidenzia selezione */
-}
-
-#selected-blocks {
-margin: 15px 0;
-font-weight: bold;
-}
-
-#terms-container {
-margin: 10px 0;
-font-size: 14px;
-}
-
-#terms-container a {
-color: blue;
-text-decoration: underline;
-cursor: pointer;
-}
-
-#buy-button {
-padding: 10px 20px;
-font-size: 16px;
-cursor: pointer;
-margin-top: 10px;
-}
-</style>
 </head>
 <body>
+<h1>Purchase Block(s)</h1>
+<p id="block-info">Loading...</p>
 
-<h1>PIXEL KINGDOM</h1>
-<h2>The story of internet strikes again</h2>
+<form id="purchase-form">
+<label>Title (required):</label><br>
+<input type="text" name="title" required placeholder="Enter title"><br><br>
 
-<div id="grid"></div>
+<label>Image (optional):</label><br>
+<input type="file" name="image"><br><br>
 
-<div id="selected-blocks">0 block(s) = 0€</div>
+<label>Text (optional):</label><br>
+<input type="text" name="text"><br><br>
 
-<div id="terms-container">
-<input type="checkbox" id="terms-checkbox">
-I accept <a href="terms.html" target="_blank">Terms and Conditions</a>
-</div>
+<label>Link/URL (optional):</label><br>
+<input type="text" name="link"><br><br>
 
-<button id="buy-button">Buy</button>
+<label>Pattern color (optional):</label><br>
+<input type="color" name="color"><br><br>
+
+<input type="checkbox" name="terms" required>
+<label>I accept <a href="terms.html" target="_blank">Terms and Conditions</a></label><br><br>
+
+<button type="submit">Purchase</button>
+<button type="button" onclick="history.back()">Back</button>
+</form>
 
 <script>
-const BLOCK_SIZE = 10; // 10x10 cells
-const PRICE_PER_BLOCK = 100; // 100€ per block
+const params = new URLSearchParams(window.location.search);
+const blockId = params.get('id');
+const count = parseInt(params.get('count')) || 1;
 
-const grid = document.getElementById("grid");
-const selectedInfo = document.getElementById("selected-blocks");
-const buyButton = document.getElementById("buy-button");
-const termsCheckbox = document.getElementById("terms-checkbox");
+document.getElementById('block-info').innerHTML =
+`You are purchasing ${count} block(s) of 10×10 pixels.<br>Total price: ${count * 100}€`;
 
-const GRID_WIDTH = 10; // default 10x10 cells for demo
-const GRID_HEIGHT = 10;
+document.getElementById('purchase-form').addEventListener('submit', e => {
+e.preventDefault();
+const formData = new FormData(e.target);
 
-let startX = null;
-let startY = null;
-let selectedCells = [];
+const data = {
+id: blockId,
+count: count,
+title: formData.get('title'),
+image: '', // qui puoi gestire upload reale
+link: formData.get('link')
+};
 
-// crea le celle
-for (let y = 0; y < GRID_HEIGHT; y++) {
-for (let x = 0; x < GRID_WIDTH; x++) {
-const cell = document.createElement("div");
-cell.className = "cell";
-cell.dataset.x = x;
-cell.dataset.y = y;
-grid.appendChild(cell);
-}
-}
-
-function updateSelectedInfo() {
-if (selectedCells.length === 0) {
-selectedInfo.innerText = `0 block(s) = 0€`;
-return;
-}
-
-// trova bounding rectangle selezionato
-const xs = selectedCells.map(c => parseInt(c.dataset.x));
-const ys = selectedCells.map(c => parseInt(c.dataset.y));
-const width = Math.max(...xs) - Math.min(...xs) + 1;
-const height = Math.max(...ys) - Math.min(...ys) + 1;
-
-const totalBlocks = width * height;
-const totalPrice = totalBlocks * PRICE_PER_BLOCK;
-
-selectedInfo.innerText = `${totalBlocks} block(s) (${width}×${height}) = ${totalPrice}€`;
-}
-
-// mouse events per selezione multipla
-grid.addEventListener("mousedown", e => {
-if (!e.target.classList.contains("cell")) return;
-startX = parseInt(e.target.dataset.x);
-startY = parseInt(e.target.dataset.y);
-selectedCells = [];
-grid.addEventListener("mousemove", mouseMoveHandler);
-});
-
-grid.addEventListener("mouseup", e => {
-grid.removeEventListener("mousemove", mouseMoveHandler);
-updateSelectedInfo();
-startX = null;
-startY = null;
-});
-
-function mouseMoveHandler(e) {
-if (!e.target.classList.contains("cell")) return;
-
-const endX = parseInt(e.target.dataset.x);
-const endY = parseInt(e.target.dataset.y);
-
-// clear selezione precedente
-document.querySelectorAll(".cell.selected").forEach(c => c.classList.remove("selected"));
-selectedCells = [];
-
-const minX = Math.min(startX, endX);
-const maxX = Math.max(startX, endX);
-const minY = Math.min(startY, endY);
-const maxY = Math.max(startY, endY);
-
-for (let y = minY; y <= maxY; y++) {
-for (let x = minX; x <= maxX; x++) {
-const cell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
-if (cell) {
-cell.classList.add("selected");
-selectedCells.push(cell);
-}
-}
-}
-updateSelectedInfo();
-}
-
-// click singolo per blocco minimo
-grid.addEventListener("click", e => {
-if (!e.target.classList.contains("cell")) return;
-if (selectedCells.length === 0) {
-selectedCells.push(e.target);
-e.target.classList.add("selected");
-updateSelectedInfo();
+fetch('/api/buy', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(data)
+}).then(res => res.json())
+.then(r => {
+if (r.success) {
+alert(`Purchase successful! Your blocks start at #${blockId}`);
+window.location.href = '/';
 }
 });
-
-buyButton.addEventListener("click", () => {
-if (!termsCheckbox.checked) {
-alert("You must accept the Terms and Conditions before purchasing!");
-return;
-}
-
-// qui puoi aggiungere la chiamata al server / Stripe
-alert(`Purchase completed: ${selectedInfo.innerText}`);
 });
 </script>
-
 </body>
 </html>

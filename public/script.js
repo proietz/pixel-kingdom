@@ -1,65 +1,61 @@
 const grid = document.getElementById("grid");
 
-let isMouseDown = false;
-let startId = null;
-let selectedBlocks = [];
+let isDragging = false;
+let startBlockId = null;
+let selectedBlocks = new Set();
 
-// Crea 2000x1000 blocchi (2000x1000 div = 2.000.000 px, adattato in blocchi 10x10)
+// crea 20.000 blocchi (200 x 100)
 for (let i = 0; i < 20000; i++) {
 const block = document.createElement("div");
 block.className = "block";
 block.dataset.id = i;
 
-block.addEventListener("mousedown", (e) => {
-e.preventDefault();
-isMouseDown = true;
-startId = i;
-selectedBlocks = [i];
-highlightSelected();
+// click singolo o start trascinamento
+block.addEventListener("mousedown", () => {
+isDragging = true;
+startBlockId = i;
+selectedBlocks = new Set([i]);
+highlightSelection();
 });
 
-block.addEventListener("mouseover", (e) => {
-if (!isMouseDown) return;
+block.addEventListener("mouseenter", () => {
+if (isDragging) {
 const currentId = i;
-selectedBlocks = getRangeIds(startId, currentId);
-highlightSelected();
+const minId = Math.min(startBlockId, currentId);
+const maxId = Math.max(startBlockId, currentId);
+selectedBlocks = new Set();
+for (let id = minId; id <= maxId; id++) {
+selectedBlocks.add(id);
+}
+highlightSelection();
+}
 });
 
-block.addEventListener("mouseup", (e) => {
-isMouseDown = false;
-if (selectedBlocks.length === 0) selectedBlocks = [i];
-// Apri la pagina di acquisto con parametri
-const firstId = selectedBlocks[0];
-const total = selectedBlocks.length;
-window.location.href = `/buy.html?id=${firstId}&total=${total}`;
+block.addEventListener("mouseup", () => {
+isDragging = false;
+const ids = Array.from(selectedBlocks);
+const totalBlocks = ids.length;
+window.location.href = `/buy.html?id=${ids[0]}&count=${totalBlocks}`;
 });
 
 grid.appendChild(block);
 }
 
-// Funzione per calcolare intervallo blocchi tra due id
-function getRangeIds(start, end) {
-const range = [];
-const min = Math.min(start, end);
-const max = Math.max(start, end);
-for (let i = min; i <= max; i++) {
-range.push(i);
-}
-return range;
-}
+document.addEventListener("mouseup", () => {
+isDragging = false;
+});
 
-// Evidenzia selezione (solo bordo arancione)
-function highlightSelected() {
+function highlightSelection() {
 document.querySelectorAll(".block").forEach(b => {
-b.style.border = "1px solid #ddd"; // reset
-});
-selectedBlocks.forEach(id => {
-const el = document.querySelector(`.block[data-id="${id}"]`);
-if (el) el.style.border = "2px solid orange";
+if (selectedBlocks.has(Number(b.dataset.id))) {
+b.style.border = "2px solid blue"; // evidenziato
+} else {
+b.style.border = "1px solid #ddd"; // normale
+}
 });
 }
 
-// Carica blocchi acquistati
+// carica blocchi acquistati
 fetch("/api/blocks")
 .then(res => res.json())
 .then(blocks => {
@@ -69,7 +65,6 @@ if (el) {
 el.innerHTML = `<a href="${b.link}" target="_blank">
 <img src="${b.image}" title="${b.title}">
 </a>`;
-el.style.border = "1px solid #000"; // blocco acquistato nero
 }
 });
 });
