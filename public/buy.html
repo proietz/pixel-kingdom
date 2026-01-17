@@ -2,128 +2,182 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Buy Blocks - Pixel Kingdom</title>
+<title>Purchase Block - Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 <style>
 body {
 font-family: Arial, Helvetica, sans-serif;
-background: #fff;
-color: #000;
 text-align: center;
+padding: 20px;
 }
-h1 { margin-top: 20px; }
-form { display: inline-block; text-align: left; margin-top: 20px; }
-label { display: block; margin-top: 10px; }
-input[type="text"], input[type="url"], textarea {
-width: 300px;
-padding: 5px;
-margin-top: 3px;
+
+#grid {
+width: 500px;
+height: 500px;
+margin: 20px auto;
+display: grid;
+grid-template-columns: repeat(10, 40px); /* 10x10 min block */
+grid-template-rows: repeat(10, 40px);
+border: 1px solid #000;
+user-select: none;
 }
-#total-info { margin-top: 15px; font-weight: bold; }
-#terms { margin-top: 10px; }
-button { margin-top: 20px; padding: 10px 20px; font-size: 14px; }
+
+.cell {
+border: 1px solid #ccc;
+cursor: pointer;
+background-color: #f9f9f9;
+}
+
+.cell.selected {
+background-color: #add8e6; /* evidenzia selezione */
+}
+
+#selected-blocks {
+margin: 15px 0;
+font-weight: bold;
+}
+
+#terms-container {
+margin: 10px 0;
+font-size: 14px;
+}
+
+#terms-container a {
+color: blue;
+text-decoration: underline;
+cursor: pointer;
+}
+
+#buy-button {
+padding: 10px 20px;
+font-size: 16px;
+cursor: pointer;
+margin-top: 10px;
+}
 </style>
 </head>
 <body>
 
-<h1>Purchase Blocks</h1>
+<h1>PIXEL KINGDOM</h1>
+<h2>The story of internet strikes again</h2>
 
-<p id="total-info"></p>
+<div id="grid"></div>
 
-<form id="buy-form">
-<label>
-Title (required):
-<input type="text" id="title" placeholder="Enter title" required>
-</label>
+<div id="selected-blocks">0 block(s) = 0€</div>
 
-<label>
-Text:
-<textarea id="text" placeholder="Optional text"></textarea>
-</label>
-
-<label>
-Image URL:
-<input type="url" id="image" placeholder="Optional image URL">
-</label>
-
-<label>
-Link URL:
-<input type="url" id="link" placeholder="Optional link URL">
-</label>
-
-<label>
-Color pattern:
-<input type="text" id="color" placeholder="Optional color (hex or name)">
-</label>
-
-<div id="terms">
-<input type="checkbox" id="accept-terms" required>
-<label for="accept-terms">I accept <a href="terms.html" target="_blank">Terms and Conditions</a></label>
+<div id="terms-container">
+<input type="checkbox" id="terms-checkbox">
+I accept <a href="terms.html" target="_blank">Terms and Conditions</a>
 </div>
 
-<button type="submit">Buy</button>
-</form>
+<button id="buy-button">Buy</button>
 
 <script>
-// Recupera parametri dalla URL
-const urlParams = new URLSearchParams(window.location.search);
-const firstId = parseInt(urlParams.get("id")) || 0;
-const totalBlocks = parseInt(urlParams.get("total")) || 1;
-const pricePerBlock = 1; // 1€ per blocco 10x10
-const totalPrice = totalBlocks * pricePerBlock;
+const BLOCK_SIZE = 10; // 10x10 cells
+const PRICE_PER_BLOCK = 100; // 100€ per block
 
-// Mostra numero di blocchi e prezzo
-const totalInfo = document.getElementById("total-info");
-totalInfo.textContent = `${totalBlocks} block${totalBlocks > 1 ? "s" : ""} selected. Total price: €${totalPrice}`;
+const grid = document.getElementById("grid");
+const selectedInfo = document.getElementById("selected-blocks");
+const buyButton = document.getElementById("buy-button");
+const termsCheckbox = document.getElementById("terms-checkbox");
 
-const form = document.getElementById("buy-form");
+const GRID_WIDTH = 10; // default 10x10 cells for demo
+const GRID_HEIGHT = 10;
 
-form.addEventListener("submit", (e) => {
-e.preventDefault();
+let startX = null;
+let startY = null;
+let selectedCells = [];
 
-const title = document.getElementById("title").value.trim();
-const text = document.getElementById("text").value.trim();
-const image = document.getElementById("image").value.trim();
-const link = document.getElementById("link").value.trim();
-const color = document.getElementById("color").value.trim();
-const acceptTerms = document.getElementById("accept-terms").checked;
+// crea le celle
+for (let y = 0; y < GRID_HEIGHT; y++) {
+for (let x = 0; x < GRID_WIDTH; x++) {
+const cell = document.createElement("div");
+cell.className = "cell";
+cell.dataset.x = x;
+cell.dataset.y = y;
+grid.appendChild(cell);
+}
+}
 
-if (!acceptTerms) {
-alert("You must accept the Terms and Conditions before purchasing.");
+function updateSelectedInfo() {
+if (selectedCells.length === 0) {
+selectedInfo.innerText = `0 block(s) = 0€`;
 return;
 }
 
-if (!title) {
-alert("Title is required.");
-return;
+// trova bounding rectangle selezionato
+const xs = selectedCells.map(c => parseInt(c.dataset.x));
+const ys = selectedCells.map(c => parseInt(c.dataset.y));
+const width = Math.max(...xs) - Math.min(...xs) + 1;
+const height = Math.max(...ys) - Math.min(...ys) + 1;
+
+const totalBlocks = width * height;
+const totalPrice = totalBlocks * PRICE_PER_BLOCK;
+
+selectedInfo.innerText = `${totalBlocks} block(s) (${width}×${height}) = ${totalPrice}€`;
 }
 
-// Prepara i dati da inviare al server
-const payload = {
-id: firstId,
-total: totalBlocks,
-title,
-text,
-image,
-link,
-color
-};
+// mouse events per selezione multipla
+grid.addEventListener("mousedown", e => {
+if (!e.target.classList.contains("cell")) return;
+startX = parseInt(e.target.dataset.x);
+startY = parseInt(e.target.dataset.y);
+selectedCells = [];
+grid.addEventListener("mousemove", mouseMoveHandler);
+});
 
-// Simulazione acquisto (puoi collegare Stripe qui)
-fetch("/api/buy", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify(payload)
-})
-.then(res => res.json())
-.then(data => {
-if (data.success) {
-alert(`Purchase successful!\nFirst block ID: ${firstId}\nTotal blocks: ${totalBlocks}`);
-window.location.href = "/"; // torna alla homepage
-} else {
-alert("Purchase failed. Please try again.");
+grid.addEventListener("mouseup", e => {
+grid.removeEventListener("mousemove", mouseMoveHandler);
+updateSelectedInfo();
+startX = null;
+startY = null;
+});
+
+function mouseMoveHandler(e) {
+if (!e.target.classList.contains("cell")) return;
+
+const endX = parseInt(e.target.dataset.x);
+const endY = parseInt(e.target.dataset.y);
+
+// clear selezione precedente
+document.querySelectorAll(".cell.selected").forEach(c => c.classList.remove("selected"));
+selectedCells = [];
+
+const minX = Math.min(startX, endX);
+const maxX = Math.max(startX, endX);
+const minY = Math.min(startY, endY);
+const maxY = Math.max(startY, endY);
+
+for (let y = minY; y <= maxY; y++) {
+for (let x = minX; x <= maxX; x++) {
+const cell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+if (cell) {
+cell.classList.add("selected");
+selectedCells.push(cell);
+}
+}
+}
+updateSelectedInfo();
+}
+
+// click singolo per blocco minimo
+grid.addEventListener("click", e => {
+if (!e.target.classList.contains("cell")) return;
+if (selectedCells.length === 0) {
+selectedCells.push(e.target);
+e.target.classList.add("selected");
+updateSelectedInfo();
 }
 });
+
+buyButton.addEventListener("click", () => {
+if (!termsCheckbox.checked) {
+alert("You must accept the Terms and Conditions before purchasing!");
+return;
+}
+
+// qui puoi aggiungere la chiamata al server / Stripe
+alert(`Purchase completed: ${selectedInfo.innerText}`);
 });
 </script>
 
