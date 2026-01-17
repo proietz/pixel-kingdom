@@ -33,15 +33,20 @@ border: 1px solid #000;
 .block {
 width: 10px;
 height: 10px;
-border: 1px solid #ddd;
+border: 1px solid #ddd; /* default */
 box-sizing: border-box;
 cursor: pointer;
+transition: border 0.1s;
 }
 
 .block img {
 width: 10px;
 height: 10px;
 display: block;
+}
+
+.block.selected {
+border: 2px solid orange; /* bordo arancione per selezione */
 }
 
 .footer {

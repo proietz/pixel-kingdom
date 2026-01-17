@@ -2,110 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pixel Kingdom - Purchase</title>
+<title>Buy Blocks - Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 <style>
 body {
 font-family: Arial, Helvetica, sans-serif;
-text-align: center;
-padding: 20px;
 background: #fff;
 color: #000;
+text-align: center;
 }
-h1 { font-size: 32px; margin-bottom: 10px; }
-p { font-size: 16px; margin: 5px 0; }
-input, select { margin: 5px 0; padding: 5px; font-size: 14px; }
-.container { display: inline-block; text-align: left; }
-.checkbox-container { margin-top: 10px; }
-button {
-padding: 10px 20px;
-margin-top: 15px;
-font-size: 16px;
-cursor: pointer;
+h1 { margin-top: 20px; }
+form { display: inline-block; text-align: left; margin-top: 20px; }
+label { display: block; margin-top: 10px; }
+input[type="text"], input[type="url"], textarea {
+width: 300px;
+padding: 5px;
+margin-top: 3px;
 }
-.back-btn { background-color: #ddd; color: #000; margin-right: 10px; }
-.purchase-btn { background-color: #4CAF50; color: #fff; }
+#total-info { margin-top: 15px; font-weight: bold; }
+#terms { margin-top: 10px; }
+button { margin-top: 20px; padding: 10px 20px; font-size: 14px; }
 </style>
 </head>
 <body>
 
 <h1>Purchase Blocks</h1>
 
-<div class="container">
-<p id="selection-info"></p>
+<p id="total-info"></p>
 
-<label for="title">Title (required):</label><br>
-<input type="text" id="title" placeholder="Enter title" required><br>
+<form id="buy-form">
+<label>
+Title (required):
+<input type="text" id="title" placeholder="Enter title" required>
+</label>
 
-<label for="text">Text:</label><br>
-<input type="text" id="text" placeholder="Optional text"><br>
+<label>
+Text:
+<textarea id="text" placeholder="Optional text"></textarea>
+</label>
 
-<label for="image">Image URL:</label><br>
-<input type="text" id="image" placeholder="Optional image URL"><br>
+<label>
+Image URL:
+<input type="url" id="image" placeholder="Optional image URL">
+</label>
 
-<label for="link">Link URL:</label><br>
-<input type="text" id="link" placeholder="Optional link URL"><br>
+<label>
+Link URL:
+<input type="url" id="link" placeholder="Optional link URL">
+</label>
 
-<label for="color">Color pattern:</label><br>
-<input type="color" id="color" value="#000000"><br>
+<label>
+Color pattern:
+<input type="text" id="color" placeholder="Optional color (hex or name)">
+</label>
 
-<div class="checkbox-container">
-<input type="checkbox" id="terms">
-<label for="terms">I accept <a href="terms.html" target="_blank">Terms and Conditions</a></label>
+<div id="terms">
+<input type="checkbox" id="accept-terms" required>
+<label for="accept-terms">I accept <a href="terms.html" target="_blank">Terms and Conditions</a></label>
 </div>
 
-<div>
-<button class="back-btn" onclick="window.history.back()">Back</button>
-<button class="purchase-btn" onclick="purchaseBlocks()">Purchase</button>
-</div>
-</div>
+<button type="submit">Buy</button>
+</form>
 
 <script>
-// leggi i parametri GET
+// Recupera parametri dalla URL
 const urlParams = new URLSearchParams(window.location.search);
-const ids = urlParams.get("ids") ? urlParams.get("ids").split(",") : [];
-const total = urlParams.get("total") || ids.length;
+const firstId = parseInt(urlParams.get("id")) || 0;
+const totalBlocks = parseInt(urlParams.get("total")) || 1;
+const pricePerBlock = 1; // 1€ per blocco 10x10
+const totalPrice = totalBlocks * pricePerBlock;
 
-document.getElementById("selection-info").innerText = `Blocks selected: ${total} (${ids.length > 0 ? ids.join(", ") : ""})`;
+// Mostra numero di blocchi e prezzo
+const totalInfo = document.getElementById("total-info");
+totalInfo.textContent = `${totalBlocks} block${totalBlocks > 1 ? "s" : ""} selected. Total price: €${totalPrice}`;
 
-function purchaseBlocks() {
+const form = document.getElementById("buy-form");
+
+form.addEventListener("submit", (e) => {
+e.preventDefault();
+
 const title = document.getElementById("title").value.trim();
 const text = document.getElementById("text").value.trim();
 const image = document.getElementById("image").value.trim();
 const link = document.getElementById("link").value.trim();
-const color = document.getElementById("color").value;
+const color = document.getElementById("color").value.trim();
+const acceptTerms = document.getElementById("accept-terms").checked;
+
+if (!acceptTerms) {
+alert("You must accept the Terms and Conditions before purchasing.");
+return;
+}
 
 if (!title) {
-alert("Title is required");
+alert("Title is required.");
 return;
 }
 
-if (!document.getElementById("terms").checked) {
-alert("You must accept the terms and conditions");
-return;
-}
-
-// per ogni blocco selezionato, invia i dati al server
-ids.forEach(id => {
-fetch("/api/buy", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-id: parseInt(id),
+// Prepara i dati da inviare al server
+const payload = {
+id: firstId,
+total: totalBlocks,
 title,
 text,
 image,
 link,
 color
+};
+
+// Simulazione acquisto (puoi collegare Stripe qui)
+fetch("/api/buy", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(payload)
 })
-});
-});
-
-alert(`Purchase successful! ${ids.length} block(s) purchased.`);
-
-// torna alla homepage
-window.location.href = "/";
+.then(res => res.json())
+.then(data => {
+if (data.success) {
+alert(`Purchase successful!\nFirst block ID: ${firstId}\nTotal blocks: ${totalBlocks}`);
+window.location.href = "/"; // torna alla homepage
+} else {
+alert("Purchase failed. Please try again.");
 }
+});
+});
 </script>
 
 </body>
