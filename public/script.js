@@ -1,61 +1,46 @@
 const grid = document.getElementById("grid");
+const TOTAL_BLOCKS = 20000; // 200x100
 
-let isDragging = false;
-let startBlockId = null;
-let selectedBlocks = new Set();
-
-// crea 20.000 blocchi (200 x 100)
-for (let i = 0; i < 20000; i++) {
+// crea la griglia
+for (let i = 0; i < TOTAL_BLOCKS; i++) {
 const block = document.createElement("div");
 block.className = "block";
 block.dataset.id = i;
-
-// click singolo o start trascinamento
-block.addEventListener("mousedown", () => {
-isDragging = true;
-startBlockId = i;
-selectedBlocks = new Set([i]);
-highlightSelection();
-});
-
-block.addEventListener("mouseenter", () => {
-if (isDragging) {
-const currentId = i;
-const minId = Math.min(startBlockId, currentId);
-const maxId = Math.max(startBlockId, currentId);
-selectedBlocks = new Set();
-for (let id = minId; id <= maxId; id++) {
-selectedBlocks.add(id);
-}
-highlightSelection();
-}
-});
-
-block.addEventListener("mouseup", () => {
-isDragging = false;
-const ids = Array.from(selectedBlocks);
-const totalBlocks = ids.length;
-window.location.href = `/buy.html?id=${ids[0]}&count=${totalBlocks}`;
-});
-
+block.onclick = () => {
+// apri pagina di acquisto per questo blocco
+window.location.href = `/buy.html?id=${i}`;
+};
 grid.appendChild(block);
 }
 
-document.addEventListener("mouseup", () => {
-isDragging = false;
-});
+// crea contatori (liberi / occupati)
+const counterContainer = document.createElement("div");
+counterContainer.style.margin = "10px 0";
+counterContainer.innerHTML = `
+<span id="blocks-occupied">Occupied: 0</span> |
+<span id="blocks-free">Free: ${TOTAL_BLOCKS}</span>
+`;
+document.body.insertBefore(counterContainer, grid);
 
-function highlightSelection() {
-document.querySelectorAll(".block").forEach(b => {
-if (selectedBlocks.has(Number(b.dataset.id))) {
-b.style.border = "2px solid blue"; // evidenziato
-} else {
-b.style.border = "1px solid #ddd"; // normale
-}
+// funzione per aggiornare contatore
+function updateCounters() {
+fetch("/api/blocks")
+.then(res => res.json())
+.then(blocks => {
+const occupied = blocks.length;
+const free = TOTAL_BLOCKS - occupied;
+document.getElementById("blocks-occupied").innerText = `Occupied: ${occupied}`;
+document.getElementById("blocks-free").innerText = `Free: ${free}`;
 });
 }
 
-// carica blocchi acquistati
+// aggiorna al caricamento pagina
+updateCounters();
+
+// aggiorna periodicamente ogni 5 secondi (opzionale)
+setInterval(updateCounters, 5000);
+
+// carica blocchi acquistati e mostra immagini/link
 fetch("/api/blocks")
 .then(res => res.json())
 .then(blocks => {
