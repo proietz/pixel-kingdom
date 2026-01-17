@@ -1,57 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Buy Block</title>
+<title>Pixel Kingdom - Purchase</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+font-family: Arial, Helvetica, sans-serif;
+text-align: center;
+padding: 20px;
+background: #fff;
+color: #000;
+}
+h1 { font-size: 32px; margin-bottom: 10px; }
+p { font-size: 16px; margin: 5px 0; }
+input, select { margin: 5px 0; padding: 5px; font-size: 14px; }
+.container { display: inline-block; text-align: left; }
+.checkbox-container { margin-top: 10px; }
+button {
+padding: 10px 20px;
+margin-top: 15px;
+font-size: 16px;
+cursor: pointer;
+}
+.back-btn { background-color: #ddd; color: #000; margin-right: 10px; }
+.purchase-btn { background-color: #4CAF50; color: #fff; }
+</style>
 </head>
 <body>
 
-<h2>Buy a 10×10 Pixel Block</h2>
+<h1>Purchase Blocks</h1>
 
-<form id="buyForm">
-<p>
-Title<br>
-<input type="text" id="title" required>
-</p>
+<div class="container">
+<p id="selection-info"></p>
 
-<p>
-Image URL (10×10 recommended)<br>
-<input type="text" id="image" required>
-</p>
+<label for="title">Title (required):</label><br>
+<input type="text" id="title" placeholder="Enter title" required><br>
 
-<p>
-Link URL<br>
-<input type="text" id="link">
-</p>
+<label for="text">Text:</label><br>
+<input type="text" id="text" placeholder="Optional text"><br>
 
-<p>
-<input type="checkbox" required>
-I accept the terms and conditions
-</p>
+<label for="image">Image URL:</label><br>
+<input type="text" id="image" placeholder="Optional image URL"><br>
 
-<button type="submit">Buy for 100€</button>
-</form>
+<label for="link">Link URL:</label><br>
+<input type="text" id="link" placeholder="Optional link URL"><br>
+
+<label for="color">Color pattern:</label><br>
+<input type="color" id="color" value="#000000"><br>
+
+<div class="checkbox-container">
+<input type="checkbox" id="terms">
+<label for="terms">I accept <a href="terms.html" target="_blank">Terms and Conditions</a></label>
+</div>
+
+<div>
+<button class="back-btn" onclick="window.history.back()">Back</button>
+<button class="purchase-btn" onclick="purchaseBlocks()">Purchase</button>
+</div>
+</div>
 
 <script>
-const id = new URLSearchParams(window.location.search).get("id");
+// leggi i parametri GET
+const urlParams = new URLSearchParams(window.location.search);
+const ids = urlParams.get("ids") ? urlParams.get("ids").split(",") : [];
+const total = urlParams.get("total") || ids.length;
 
-document.getElementById("buyForm").onsubmit = e => {
-e.preventDefault();
+document.getElementById("selection-info").innerText = `Blocks selected: ${total} (${ids.length > 0 ? ids.join(", ") : ""})`;
 
+function purchaseBlocks() {
+const title = document.getElementById("title").value.trim();
+const text = document.getElementById("text").value.trim();
+const image = document.getElementById("image").value.trim();
+const link = document.getElementById("link").value.trim();
+const color = document.getElementById("color").value;
+
+if (!title) {
+alert("Title is required");
+return;
+}
+
+if (!document.getElementById("terms").checked) {
+alert("You must accept the terms and conditions");
+return;
+}
+
+// per ogni blocco selezionato, invia i dati al server
+ids.forEach(id => {
 fetch("/api/buy", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
-id,
-title: title.value,
-image: image.value,
-link: link.value
+id: parseInt(id),
+title,
+text,
+image,
+link,
+color
 })
-}).then(() => {
-alert("Purchase successful!");
-window.location.href = "/";
 });
-};
+});
+
+alert(`Purchase successful! ${ids.length} block(s) purchased.`);
+
+// torna alla homepage
+window.location.href = "/";
+}
 </script>
 
 </body>

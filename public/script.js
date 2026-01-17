@@ -1,13 +1,15 @@
+const grid = document.getElementById("grid");
+
 let isDragging = false;
 let startBlock = null;
 let selectedBlocks = [];
-const grid = document.getElementById("grid");
 
 // crea 20.000 blocchi (200 x 100)
 for (let i = 0; i < 20000; i++) {
 const block = document.createElement("div");
 block.className = "block";
 block.dataset.id = i;
+
 block.addEventListener("mousedown", () => {
 isDragging = true;
 startBlock = block;
@@ -26,30 +28,26 @@ highlightBlocks(selectedBlocks);
 block.addEventListener("mouseup", () => {
 if (isDragging) {
 isDragging = false;
-openPurchasePopup(selectedBlocks);
-}
-});
-grid.appendChild(block);
-}
 
-// carica blocchi acquistati
-fetch("/api/blocks")
-.then(res => res.json())
-.then(blocks => {
-blocks.forEach(b => {
-const el = document.querySelector(`.block[data-id="${b.id}"]`);
-if (el) {
-el.innerHTML = `<a href="${b.link}" target="_blank">
-<img src="${b.image}" title="${b.title}">
-</a>`;
+// prepara dati da inviare alla pagina di acquisto
+const blockIds = selectedBlocks.map(b => b.dataset.id).join(",");
+const totalBlocks = selectedBlocks.length;
+
+// pagina di acquisto
+window.location.href = `buy.html?ids=${blockIds}&total=${totalBlocks}`;
 }
 });
+
+grid.appendChild(block);
 });
+
+// evidenzia i blocchi selezionati
 function highlightBlocks(blocks) {
 document.querySelectorAll(".block").forEach(b => b.classList.remove("highlight"));
 blocks.forEach(b => b.classList.add("highlight"));
 }
 
+// ottiene tutti i blocchi in un rettangolo tra start e end
 function getBlocksInRectangle(start, end) {
 const allBlocks = Array.from(document.querySelectorAll(".block"));
 const startId = parseInt(start.dataset.id);
@@ -72,3 +70,17 @@ const col = id % 200;
 return row >= minRow && row <= maxRow && col >= minCol && col <= maxCol;
 });
 }
+
+// caricamento blocchi acquistati
+fetch("/api/blocks")
+.then(res => res.json())
+.then(blocks => {
+blocks.forEach(b => {
+const el = document.querySelector(`.block[data-id="${b.id}"]`);
+if (el) {
+el.innerHTML = `<a href="${b.link}" target="_blank">
+<img src="${b.image}" title="${b.title}">
+</a>`;
+}
+});
+});
