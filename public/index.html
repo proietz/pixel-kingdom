@@ -1,92 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>Pixel Kingdom: The Story of Internet Strikes Again</title>
-
-<!-- NON TOCCARE LO STYLE -->
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>Pixel Kingdom</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- HEADER (GIÀ PERFETTO, NON MODIFICATO) -->
-<header id="top-bar">
-<div id="cell-counter">
-Free cells: <span id="freeCells">2000000</span> |
-Sold cells: <span id="soldCells">0</span>
-</div>
-
-<h1>Pixel Kingdom</h1>
-
-<div id="top-links">
-<a href="/terms.html" target="_blank">Terms</a>
-<a href="/how-it-works.html" target="_blank">How it works</a>
-</div>
-</header>
-
-<p id="subtitle">
-2 million cells · 1€ per cell · the story of internet strikes again
+<h1>PIXEL KINGDOM</h1>
+<h2>The story of internet strikes again</h2>
+<p class="subtitle">
+2,000,000 pixels available · 100€ per 10×10 block
 </p>
 
-<!-- CANVAS (VERSIONE NERA, COME VOLEVI) -->
-<div id="canvas-wrapper">
-<canvas id="pixelCanvas" width="2000" height="1000"></canvas>
-</div>
+<div id="grid"></div>
 
-<footer>
-© Pixel Kingdom – All rights reserved
-</footer>
-
-<!-- ================= POPUP ACQUISTO ================= -->
-<!-- NON CAMBIA NULLA DELLA HOME, È SOLO UN OVERLAY -->
-
-<div id="purchasePopup" class="popup hidden">
-<div class="popup-content">
-
-<button class="close-btn" id="closePopup">← Back</button>
-
-<h2>Purchase selection</h2>
-
-<p id="popupCoords"></p>
-<p id="popupSize"></p>
-<p id="popupPrice"></p>
-
-<label>
-Title (required)
-<input type="text" id="titleInput" placeholder="Example: My website" />
-</label>
-
-<label>
-Image
-<input type="file" id="imageInput" accept="image/*" />
-</label>
-
-<label>
-Text
-<textarea id="textInput" placeholder="Optional description"></textarea>
-</label>
-
-<label>
-Link / URL
-<input type="url" id="linkInput" placeholder="https://example.com" />
-</label>
-
-<label>
-Background color
-<input type="color" id="colorInput" />
-</label>
-
-<label class="terms-check">
-<input type="checkbox" id="acceptTerms" />
-I accept the
-<a href="/terms.html" target="_blank">Terms and Conditions</a>
-</label>
-
-<button id="buyButton" disabled>Buy with Stripe</button>
-
-</div>
-</div>
-<!-- ================= FINE POPUP ================= -->
+<p class="footer">
+© Pixel Kingdom. All rights reserved.
+</p>
 
 <script src="script.js"></script>
 </body>
