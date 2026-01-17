@@ -1,49 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Pixel Kingdom</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="topBar">
-<div id="leftBar">
-<input type="text" id="searchCoordinates" placeholder="Search by X,Y">
-<div id="cellCounter">Free: 2,000,000 | Occupied: 0</div>
-</div>
-<h1 id="title">Pixel Kingdom</h1>
-<div id="rightBar">
-<a href="terms.html" target="_blank">Terms & Conditions</a>
-<a href="instructions.html" target="_blank">Instructions</a>
-</div>
-</div>
 
-<div id="canvasWrapper">
-<canvas id="pixelCanvas" width="2000" height="1000"></canvas>
-</div>
+<h1>PIXEL KINGDOM</h1>
+<h2>The story of internet strikes again</h2>
+<p class="subtitle">
+2,000,000 pixels available · 100€ per 10×10 block
+</p>
 
-<div id="slogan">2 millions cells 1€ for cell - The story of Internet strikes again</div>
+<div id="grid"></div>
 
-<div id="footer">© All rights reserved</div>
-
-<!-- Popup acquisto -->
-<div id="popup" class="hidden">
-<div id="popupHeader">
-<span id="popupCoordinates"></span>
-<button id="closePopup">Back</button>
-</div>
-<div id="popupContent">
-<label>Title (required): <input type="text" id="popupTitle" placeholder="e.g. Cute Dog"></label>
-<label>Text: <input type="text" id="popupText" placeholder="Optional text"></label>
-<label>Image: <input type="file" id="popupImage"></label>
-<label>Link/URL: <input type="text" id="popupLink" placeholder="Optional URL"></label>
-<label>Color Pattern: <input type="color" id="popupColor"></label>
-<label><input type="checkbox" id="acceptTermsPopup"> Accept Terms & Conditions</label>
-</div>
-<button id="purchaseConfirm">Purchase</button>
-</div>
-
-<div id="selectionInfo" class="hidden"></div>
+<p class="footer">
+© Pixel Kingdom. All rights reserved.
+</p>
 
 <script src="script.js"></script>
 </body>

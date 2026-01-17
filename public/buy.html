@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Buy Block</title>
+</head>
+<body>
+
+<h2>Buy a 10×10 Pixel Block</h2>
+
+<form id="buyForm">
+<p>
+Title<br>
+<input type="text" id="title" required>
+</p>
+
+<p>
+Image URL (10×10 recommended)<br>
+<input type="text" id="image" required>
+</p>
+
+<p>
+Link URL<br>
+<input type="text" id="link">
+</p>
+
+<p>
+<input type="checkbox" required>
+I accept the terms and conditions
+</p>
+
+<button type="submit">Buy for 100€</button>
+</form>
+
+<script>
+const id = new URLSearchParams(window.location.search).get("id");
+
+document.getElementById("buyForm").onsubmit = e => {
+e.preventDefault();
+
+fetch("/api/buy", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+id,
+title: title.value,
+image: image.value,
+link: link.value
+})
+}).then(() => {
+alert("Purchase successful!");
+window.location.href = "/";
+});
+};
+</script>
+
+</body>
+</html>
