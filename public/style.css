@@ -1,55 +1,85 @@
-body {
-background: #ffffff;
-color: #000;
-font-family: Arial, Helvetica, sans-serif;
-text-align: center;
+const grid = document.getElementById("grid");
+
+// CREA 20.000 blocchi (200 x 100)
+for (let i = 0; i < 20000; i++) {
+const block = document.createElement("div");
+block.className = "block";
+block.dataset.id = i;
+
+// CLICK PER APRIRE POPUP CELLE ACQUISTATE
+block.addEventListener("click", () => {
+const purchasedBlock = purchasedBlocks.find(b => b.id === i);
+if (purchasedBlock) {
+showPopup(purchasedBlock);
+} else {
+window.location.href = `/buy.html?id=${i}`;
+}
+});
+
+grid.appendChild(block);
 }
 
-h1 {
-margin-top: 20px;
-font-size: 42px;
+// MEMORIZZA BLOCCHI ACQUISTATI
+let purchasedBlocks = [];
+
+// CARICA BLOCCCHI ACQUISTATI DAL SERVER
+fetch("/api/blocks")
+.then(res => res.json())
+.then(blocks => {
+purchasedBlocks = blocks.map(b => ({
+id: b.id,
+title: b.title,
+image: b.image,
+link: b.link
+}));
+
+purchasedBlocks.forEach(b => {
+const el = document.querySelector(`.block[data-id="${b.id}"]`);
+if (el) {
+el.style.backgroundImage = `url(${b.image})`;
+el.dataset.title = b.title;
+el.dataset.link = b.link;
+}
+});
+});
+
+// FUNZIONE PER MOSTRARE POPUP DETTAGLI
+function showPopup(block) {
+// CREA OVERLAY
+const overlay = document.createElement("div");
+overlay.id = "popupOverlay";
+
+// CREA BOX DEL POPUP
+const popup = document.createElement("div");
+popup.id = "popupBox";
+
+// TITOLO
+const title = document.createElement("h3");
+title.textContent = block.title || "No title";
+popup.appendChild(title);
+
+// IMMAGINE
+if (block.image) {
+const img = document.createElement("img");
+img.src = block.image;
+popup.appendChild(img);
 }
 
-h2 {
-font-size: 18px;
-font-weight: normal;
+// LINK
+if (block.link) {
+const link = document.createElement("a");
+link.href = block.link;
+link.textContent = "Go to link";
+link.target = "_blank";
+popup.appendChild(link);
 }
 
-.subtitle {
-margin-bottom: 20px;
-font-size: 14px;
-}
+// CHIUDI POPUP
+const closeBtn = document.createElement("button");
+closeBtn.textContent = "Close";
+closeBtn.onclick = () => document.body.removeChild(overlay);
+popup.appendChild(closeBtn);
 
-#grid {
-width: 2000px;
-height: 1000px;
-margin: 0 auto;
-display: grid;
-grid-template-columns: repeat(200, 10px);
-grid-template-rows: repeat(100, 10px);
-border: 1px solid #000;
-}
-
-.block {
-width: 10px;
-height: 10px;
-border: 1px solid #ddd; /* default */
-box-sizing: border-box;
-cursor: pointer;
-transition: border 0.1s;
-}
-
-.block img {
-width: 10px;
-height: 10px;
-display: block;
-}
-
-.block.selected {
-border: 2px solid orange; /* bordo arancione per selezione */
-}
-
-.footer {
-margin-top: 30px;
-font-size: 12px;
+overlay.appendChild(popup);
+document.body.appendChild(overlay);
 }
